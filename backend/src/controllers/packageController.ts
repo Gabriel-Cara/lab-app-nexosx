@@ -10,8 +10,10 @@ const generateCode = () => randomBytes(3).toString("hex").toUpperCase();
 export const listPackages = async (req: AuthenticatedRequest, res: Response) => {
   const { role, id } = req.user!;
 
+  const where = role === "MORADOR" ? { residentId: id } : undefined;
+
   const packages = await prisma.package.findMany({
-    where: role === "MORADOR" ? { residentId: id } : undefined,
+    ...(where ? { where } : {}),
     include: {
       resident: { select: { name: true, apartment: true, phone: true } },
       createdBy: { select: { name: true } },
@@ -35,12 +37,12 @@ export const createPackage = async (req: AuthenticatedRequest, res: Response) =>
     data: {
       code,
       description: parsed.data.description,
-      carrier: parsed.data.carrier,
+      carrier: parsed.data.carrier ?? null,
       residentId: parsed.data.residentId,
       createdById: req.user!.id,
     },
     include: {
-      resident: true,
+      resident: { select: { name: true, phone: true } },
     },
   });
 
@@ -54,6 +56,9 @@ export const createPackage = async (req: AuthenticatedRequest, res: Response) =>
 
 export const retrievePackage = async (req: AuthenticatedRequest, res: Response) => {
   const packageId = req.params.id;
+  if (!packageId) {
+    return res.status(400).json({ message: "Identificador da encomenda é obrigatório" });
+  }
   const parsed = packageRetrieveSchema.safeParse(req.body);
 
   if (!parsed.success) {

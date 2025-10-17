@@ -27,8 +27,8 @@ export const registerVisitor = async (req: AuthenticatedRequest, res: Response) 
 
   const visitor = await prisma.visitor.upsert({
     where: { document },
-    update: { name, phone, visitReason },
-    create: { name, document, phone, visitReason },
+    update: { name, phone: phone ?? null, visitReason: visitReason ?? null },
+    create: { name, document, phone: phone ?? null, visitReason: visitReason ?? null },
   });
 
   const log = await prisma.visitLog.create({
@@ -36,7 +36,7 @@ export const registerVisitor = async (req: AuthenticatedRequest, res: Response) 
       visitorId: visitor.id,
       hostId,
       handledById: req.user!.id,
-      notes: visitReason,
+      notes: visitReason ?? null,
     },
     include: {
       visitor: true,
@@ -50,6 +50,9 @@ export const registerVisitor = async (req: AuthenticatedRequest, res: Response) 
 
 export const markExit = async (req: AuthenticatedRequest, res: Response) => {
   const logId = req.params.id;
+  if (!logId) {
+    return res.status(400).json({ message: "Identificador do registro é obrigatório" });
+  }
   const parsed = visitorExitSchema.safeParse(req.body);
   if (!parsed.success) {
     return res.status(400).json({ message: "Dados inválidos", errors: parsed.error.flatten() });
@@ -59,7 +62,7 @@ export const markExit = async (req: AuthenticatedRequest, res: Response) => {
     where: { id: logId },
     data: {
       exitTime: new Date(),
-      notes: parsed.data.notes,
+      notes: parsed.data.notes ?? null,
     },
     include: {
       visitor: true,
