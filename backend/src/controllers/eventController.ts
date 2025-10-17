@@ -31,9 +31,12 @@ export const createEvent = async (req: AuthenticatedRequest, res: Response) => {
     return res.status(400).json({ message: "Dados inválidos", errors: parsed.error.flatten() });
   }
 
+  const { description, ...eventData } = parsed.data;
+
   const event = await prisma.event.create({
     data: {
-      ...parsed.data,
+      ...eventData,
+      description: description ?? null,
       createdById: req.user!.id,
     },
   });
@@ -64,7 +67,7 @@ export const bookEvent = async (req: AuthenticatedRequest, res: Response) => {
     data: {
       eventId: parsed.data.eventId,
       residentId: req.user!.id,
-      notes: parsed.data.notes,
+      notes: parsed.data.notes ?? null,
     },
   });
 

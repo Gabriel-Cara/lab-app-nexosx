@@ -80,9 +80,9 @@ export const createUser = async (req: AuthenticatedRequest, res: Response) => {
         data.role === "MORADOR"
           ? {
               create: {
-                building: data.building,
-                vehicle: data.vehicle,
-                emergencyContact: data.emergencyContact,
+                building: data.building ?? null,
+                vehicle: data.vehicle ?? null,
+                emergencyContact: data.emergencyContact ?? null,
               },
             }
           : undefined,
