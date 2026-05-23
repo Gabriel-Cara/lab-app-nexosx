@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- TODO: troque https://SEU-DOMINIO.com pelo seu domínio real -->
+  <url><loc>https://SEU-DOMINIO.com/pt</loc></url>
+  <url><loc>https://SEU-DOMINIO.com/en</loc></url>
+  <url><loc>https://SEU-DOMINIO.com/pt/pricing</loc></url>
+  <url><loc>https://SEU-DOMINIO.com/en/pricing</loc></url>
+  <url><loc>https://SEU-DOMINIO.com/pt/privacy</loc></url>
+  <url><loc>https://SEU-DOMINIO.com/en/privacy</loc></url>
+  <url><loc>https://SEU-DOMINIO.com/pt/terms</loc></url>
+  <url><loc>https://SEU-DOMINIO.com/en/terms</loc></url>
+</urlset>

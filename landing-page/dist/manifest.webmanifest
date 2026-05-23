@@ -1,0 +1,16 @@
+{
+  "name": "Nexos",
+  "short_name": "Nexos",
+  "description": "Nexos — gestão completa do condomínio em um só lugar.",
+  "start_url": "/pt",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

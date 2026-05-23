@@ -1,0 +1,249 @@
+{
+  "nav": {
+    "home": "Home",
+    "pricing": "Pricing",
+    "contact": "Contact",
+    "login": "Sign in",
+    "cta": "Book a demo",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "hero": {
+    "badge": "New: fast rollout",
+    "title": "Complete condo management, without the hassle",
+    "subtitle": "Nexos brings gatehouse routines, residents, visitors, packages, common areas, bookings and events into one place — with roles and history.",
+    "primaryCta": "Book a demo",
+    "secondaryCta": "See the product",
+    "stat1Label": "Profiles & security",
+    "stat2Label": "more agility",
+    "stat3Label": "modern experience",
+    "kpi1Title": "Visitors today",
+    "kpi1Value": "18",
+    "kpi2Title": "Packages pending",
+    "kpi2Value": "7",
+    "kpi3Title": "Today’s bookings",
+    "kpi3Value": "5"
+  },
+  "features": {
+    "eyebrow": "Features",
+    "title": "Gatehouse + administration in one system",
+    "subtitle": "Automate daily routines, give the board visibility, and make residents’ lives easier.",
+    "items": {
+      "automation": {
+        "title": "Visitor control",
+        "desc": "Check-in/out with host, visit reason and full history."
+      },
+      "billing": {
+        "title": "Packages with pickup code",
+        "desc": "Log arrivals, notify residents and validate pickup with a code."
+      },
+      "docs": {
+        "title": "Residents & staff",
+        "desc": "Tower/unit records, role-based access and first-access email invite."
+      },
+      "insights": {
+        "title": "Common area bookings",
+        "desc": "Time slots, conflict prevention and approve/cancel workflows."
+      },
+      "security": {
+        "title": "Condo events",
+        "desc": "Create events and manage capacity, sign-ups and announcements."
+      },
+      "polish": {
+        "title": "Audit trail",
+        "desc": "Logs and history for faster audits and safer operations."
+      }
+    }
+  },
+  "screens": {
+    "eyebrow": "Product",
+    "title": "A quick look at Nexos",
+    "subtitle": "Screens your gatehouse and admin team use every day.",
+    "livePreview": "Live preview",
+    "dashboard": {
+      "title": "Gatehouse dashboard",
+      "desc": "Visitors, packages and shift tasks in one place.",
+      "tag": "Fast indicators for the desk"
+    },
+    "invoices": {
+      "title": "Packages",
+      "desc": "Arrivals, status and pickup validation with a code.",
+      "tag": "Pickup code + history"
+    },
+    "clients": {
+      "title": "Visitors",
+      "desc": "Full log with host, documents and checkout.",
+      "tag": "Check-in/out with notes"
+    },
+    "reports": {
+      "title": "Bookings",
+      "desc": "Common area schedule without conflicts — with approvals.",
+      "tag": "Slots, approvals and cancellations"
+    }
+  },
+  "testimonials": {
+    "eyebrow": "Results",
+    "title": "More organized and safer buildings",
+    "subtitle": "Nexos reduces friction at the gatehouse and brings transparency to managers and residents.",
+    "items": {
+      "one": {
+        "quote": "Pickup codes ended package mix-ups and reduced calls to the front desk.",
+        "name": "Patricia Almeida",
+        "role": "Condo manager"
+      },
+      "two": {
+        "quote": "Visitor check-in is faster — and the audit trail is there whenever we need it.",
+        "name": "Bruno Santos",
+        "role": "Gatehouse supervisor"
+      },
+      "three": {
+        "quote": "Bookings and events are now centralized. Residents coordinate without spreadsheets or chat chaos.",
+        "name": "Renata Ferreira",
+        "role": "Property administrator"
+      }
+    }
+  },
+  "pricingPreview": {
+    "eyebrow": "Pricing",
+    "title": "Plans that fit your building",
+    "subtitle": "Start simple and grow with your number of units and daily routines.",
+    "seeFull": "See full pricing"
+  },
+  "pricing": {
+    "mostPopular": "Most popular",
+    "perMonth": "/month",
+    "cta": "Choose plan",
+    "plans": {
+      "starter": {
+        "name": "Starter",
+        "desc": "For small buildings getting started with a digital gatehouse.",
+        "price": "$19",
+        "features": [
+          "Up to 80 units",
+          "Visitors (check-in/out)",
+          "Packages (arrival + pickup)",
+          "Email support"
+        ],
+        "footnote": "A solid start with full history."
+      },
+      "pro": {
+        "name": "Pro",
+        "desc": "For growing buildings with busy common areas.",
+        "price": "$39",
+        "features": [
+          "Up to 250 units",
+          "Common area bookings (no conflicts)",
+          "Events + registrations",
+          "Role-based access + logs"
+        ],
+        "footnote": "Reduce friction and increase transparency."
+      },
+      "business": {
+        "name": "Business",
+        "desc": "For larger operations and multi-building setups.",
+        "price": "$79",
+        "features": [
+          "Unlimited units",
+          "Multi-building / multi-condo",
+          "Integrations via webhook / API",
+          "Priority support + onboarding"
+        ],
+        "footnote": "Built for scale and admin companies."
+      }
+    }
+  },
+  "pricingPage": {
+    "eyebrow": "Pricing",
+    "title": "Plans for every building",
+    "subtitle": "No surprises. Adjust as your building grows.",
+    "enterpriseTitle": "Need something custom?",
+    "enterpriseDesc": "Assisted migration, integrations and tailored workflows — we can quote a custom plan.",
+    "enterpriseCta": "Talk to sales",
+    "faqTitle": "FAQ",
+    "faqSubtitle": "Everything you need to decide.",
+    "faq": {
+      "one": {
+        "q": "Can I change plans later?",
+        "a": "Yes. You can upgrade or downgrade anytime."
+      },
+      "two": {
+        "q": "Do residents get access too?",
+        "a": "Yes. Nexos supports roles (admin, staff, resident) with permissions and first-access invites."
+      },
+      "three": {
+        "q": "How do notifications work?",
+        "a": "You can notify by email and connect automations through webhooks (Zapier/Make/n8n) if needed."
+      },
+      "four": {
+        "q": "Is it secure?",
+        "a": "We provide access control, logs and best practices to keep operations traceable and protected."
+      }
+    }
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "Want to see Nexos in your building?",
+    "subtitle": "Tell us your unit count and routines. We'll walk you through a complete flow in minutes.",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
+    "privacyNote": "By sending, you agree to be contacted by the Nexos team. No spam.",
+    "name": "Name",
+    "email": "Email",
+    "company": "Building / Management",
+    "phone": "Phone",
+    "message": "Message",
+    "namePh": "Your name",
+    "emailPh": "you@company.com",
+    "companyPh": "Building or management company",
+    "phonePh": "+1 (555) 000-0000",
+    "messagePh": "e.g. we need visitor control, packages and common area bookings.",
+    "responseTime": "We reply within 1 business day.",
+    "sending": "Sending...",
+    "send": "Send",
+    "success": "Got it! We’ll reach out shortly.",
+    "error": "Couldn’t send. Please try again."
+  },
+  "footer": {
+    "tagline": "Designed to simplify condominium routines, streamline front desk operations, and provide transparency and autonomy to residents.",
+    "pages": "Pages",
+    "home": "Home",
+    "pricing": "Pricing",
+    "contact": "Contact",
+    "legal": "Legal",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "rights": "All rights reserved.",
+    "madeWith": "Built by Gabriel Vieira Quesada Cara to simplify condominium routines."
+  },
+  "legal": {
+    "privacyTitle": "Privacy Policy",
+    "privacyIntro": "This page explains how we handle data submitted through the Nexos contact form.",
+    "privacyWhatWeCollectTitle": "What we collect",
+    "privacyWhatWeCollect1": "Information you provide (name, email, phone, building/management and message).",
+    "privacyWhatWeCollect2": "Basic technical information for security and abuse prevention (e.g., IP for rate limiting).",
+    "privacyHowWeUseTitle": "How we use it",
+    "privacyHowWeUse": "We use the data to reply, schedule demos and improve our sales communication.",
+    "privacyRetentionTitle": "Retention",
+    "privacyRetention": "We keep data only as long as needed to handle your request and meet legal/operational obligations.",
+    "privacyContactTitle": "Contact",
+    "privacyContact": "If you have privacy questions, reach out via the email shown in the contact section.",
+    "termsTitle": "Terms of Service",
+    "termsIntro": "By using this website and submitting the form, you agree to these terms.",
+    "termsUseTitle": "Website use",
+    "termsUse": "Content is informational and may change. Please do not submit sensitive data through this website.",
+    "termsLiabilityTitle": "Liability",
+    "termsLiability": "We aim to keep the site available, but do not guarantee uninterrupted service. We are not liable for indirect damages.",
+    "termsContactTitle": "Contact",
+    "termsContact": "For questions about these terms, use the contact section."
+  },
+  "meta": {
+    "homeTitle": "Nexos | Complete condo management",
+    "homeDescription": "Manage visitors, packages, residents, common areas, bookings and events in one place.",
+    "pricingTitle": "Pricing | Nexos",
+    "pricingDescription": "Plans that fit your building — start simple and grow with confidence.",
+    "privacyTitle": "Privacy | Nexos",
+    "privacyDescription": "How we handle data collected on the Nexos website.",
+    "termsTitle": "Terms | Nexos",
+    "termsDescription": "Terms of service for the Nexos website."
+  }
+}

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Nexos">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="1" stop-color="#2563eb"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="96" fill="url(#g)"/>
+  <path d="M158 318c0-88 62-154 150-154 36 0 66 10 90 28l-36 44c-14-10-32-16-54-16-54 0-90 40-90 98 0 58 36 98 90 98 24 0 44-6 60-18l32 46c-26 18-58 28-96 28-88 0-146-66-146-154z" fill="#ffffff"/>
+</svg>

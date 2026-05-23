@@ -1,0 +1,249 @@
+{
+  "nav": {
+    "home": "Início",
+    "pricing": "Preços",
+    "contact": "Contato",
+    "login": "Entrar",
+    "cta": "Agendar demo",
+    "openMenu": "Abrir menu",
+    "closeMenu": "Fechar menu"
+  },
+  "hero": {
+    "badge": "Novo: implantação rápida",
+    "title": "Gestão completa do condomínio, sem burocracia",
+    "subtitle": "Nexos centraliza portaria, moradores, visitantes, encomendas, áreas comuns, reservas e eventos — com permissões e histórico.",
+    "primaryCta": "Agendar demonstração",
+    "secondaryCta": "Ver o sistema",
+    "stat1Label": "Perfis & segurança",
+    "stat2Label": "mais agilidade",
+    "stat3Label": "experiência moderna",
+    "kpi1Title": "Visitantes hoje",
+    "kpi1Value": "18",
+    "kpi2Title": "Encomendas pendentes",
+    "kpi2Value": "7",
+    "kpi3Title": "Reservas do dia",
+    "kpi3Value": "5"
+  },
+  "features": {
+    "eyebrow": "Recursos",
+    "title": "Portaria e administração em um único sistema",
+    "subtitle": "Automatize rotinas, dê transparência para o síndico e facilite a vida do morador.",
+    "items": {
+      "automation": {
+        "title": "Controle de visitantes",
+        "desc": "Registre entrada e saída com anfitrião, motivo da visita e histórico completo."
+      },
+      "billing": {
+        "title": "Encomendas com código de retirada",
+        "desc": "Cadastre a chegada, notifique o morador e valide a retirada com código."
+      },
+      "docs": {
+        "title": "Moradores e colaboradores",
+        "desc": "Cadastro por torre/apto, perfis de acesso e convite de primeiro acesso por e-mail."
+      },
+      "insights": {
+        "title": "Reservas de áreas comuns",
+        "desc": "Agenda por horário, prevenção de conflitos e fluxo de aprovação/cancelamento."
+      },
+      "security": {
+        "title": "Eventos do condomínio",
+        "desc": "Crie eventos e controle inscrições, capacidade e comunicados para os moradores."
+      },
+      "polish": {
+        "title": "Auditoria e rastreabilidade",
+        "desc": "Logs e histórico para facilitar auditorias e manter a operação segura."
+      }
+    }
+  },
+  "screens": {
+    "eyebrow": "Produto",
+    "title": "Uma prévia do Nexos",
+    "subtitle": "Telas que portaria e administração usam no dia a dia.",
+    "livePreview": "Prévia ao vivo",
+    "dashboard": {
+      "title": "Painel da portaria",
+      "desc": "Visitantes, encomendas e pendências do turno em um só lugar.",
+      "tag": "Indicadores rápidos para o atendimento"
+    },
+    "invoices": {
+      "title": "Encomendas",
+      "desc": "Chegada, status e retirada com validação de código.",
+      "tag": "Código de retirada + histórico"
+    },
+    "clients": {
+      "title": "Visitantes",
+      "desc": "Registro completo com anfitrião, documentos e saída.",
+      "tag": "Entrada/saída com observações"
+    },
+    "reports": {
+      "title": "Reservas",
+      "desc": "Agenda de áreas comuns sem conflito e com aprovação.",
+      "tag": "Horários, aprovações e cancelamentos"
+    }
+  },
+  "testimonials": {
+    "eyebrow": "Resultados",
+    "title": "Condomínios mais organizados e seguros",
+    "subtitle": "Nexos reduz atrito na portaria e dá transparência para síndico e moradores.",
+    "items": {
+      "one": {
+        "quote": "A retirada com código acabou com confusão de encomenda e reduziu as ligações para a portaria.",
+        "name": "Patrícia Almeida",
+        "role": "Síndica"
+      },
+      "two": {
+        "quote": "O check-in de visitante ficou muito mais rápido — e agora temos histórico para qualquer auditoria.",
+        "name": "Bruno Santos",
+        "role": "Supervisor de Portaria"
+      },
+      "three": {
+        "quote": "Reservas e eventos ficaram centralizados. Os moradores se organizam sem depender de planilhas ou WhatsApp.",
+        "name": "Renata Ferreira",
+        "role": "Administradora de Condomínios"
+      }
+    }
+  },
+  "pricingPreview": {
+    "eyebrow": "Planos",
+    "title": "Planos para o tamanho do seu condomínio",
+    "subtitle": "Comece simples e evolua conforme o número de unidades e a rotina da portaria.",
+    "seeFull": "Ver página completa"
+  },
+  "pricing": {
+    "mostPopular": "Mais escolhido",
+    "perMonth": "/mês",
+    "cta": "Quero este plano",
+    "plans": {
+      "starter": {
+        "name": "Starter",
+        "desc": "Para condomínios pequenos começarem com portaria digital.",
+        "price": "R$ 99",
+        "features": [
+          "Até 80 unidades",
+          "Visitantes (entrada/saída)",
+          "Encomendas (chegada e retirada)",
+          "Suporte por e-mail"
+        ],
+        "footnote": "Ideal para começar com controle e histórico."
+      },
+      "pro": {
+        "name": "Pro",
+        "desc": "Para condomínios em crescimento com áreas comuns ativas.",
+        "price": "R$ 199",
+        "features": [
+          "Até 250 unidades",
+          "Reservas de áreas comuns (sem conflito)",
+          "Eventos + inscrições",
+          "Permissões por perfil + logs"
+        ],
+        "footnote": "Para reduzir atrito e dar transparência à gestão."
+      },
+      "business": {
+        "name": "Business",
+        "desc": "Para operações maiores e múltiplos blocos/condomínios.",
+        "price": "R$ 399",
+        "features": [
+          "Unidades ilimitadas",
+          "Multi-blocos / multi-condomínios",
+          "Integrações via webhook / API",
+          "Suporte prioritário + onboarding"
+        ],
+        "footnote": "Para administradoras e condomínios com volume."
+      }
+    }
+  },
+  "pricingPage": {
+    "eyebrow": "Preços",
+    "title": "Planos para cada condomínio",
+    "subtitle": "Sem pegadinha. Ajuste conforme o tamanho e as necessidades.",
+    "enterpriseTitle": "Precisa de algo sob medida?",
+    "enterpriseDesc": "Migração assistida, integrações e fluxos personalizados: montamos uma proposta.",
+    "enterpriseCta": "Falar com especialista",
+    "faqTitle": "Perguntas frequentes",
+    "faqSubtitle": "Tudo o que você precisa para decidir.",
+    "faq": {
+      "one": {
+        "q": "Posso trocar de plano depois?",
+        "a": "Sim. Você pode fazer upgrade/downgrade a qualquer momento."
+      },
+      "two": {
+        "q": "Moradores também podem acessar?",
+        "a": "Sim. O Nexos suporta perfis (admin, staff e resident) com permissões e convites de primeiro acesso."
+      },
+      "three": {
+        "q": "Como funcionam notificações?",
+        "a": "Você pode notificar por e-mail e integrar automações via webhook (Zapier/Make/n8n) conforme a sua rotina."
+      },
+      "four": {
+        "q": "O sistema é seguro?",
+        "a": "Contamos com controle de acesso, logs e boas práticas para manter a operação rastreável e protegida."
+      }
+    }
+  },
+  "contact": {
+    "eyebrow": "Contato",
+    "title": "Quer ver o Nexos funcionando no seu condomínio?",
+    "subtitle": "Conte o tamanho do condomínio e suas rotinas. A gente te mostra um fluxo completo em poucos minutos.",
+    "emailLabel": "E-mail",
+    "phoneLabel": "Telefone",
+    "privacyNote": "Ao enviar, você concorda em receber contato do time Nexos. Sem spam.",
+    "name": "Nome",
+    "email": "E-mail",
+    "company": "Condomínio / Administradora",
+    "phone": "Telefone",
+    "message": "Mensagem",
+    "namePh": "Seu nome",
+    "emailPh": "voce@exemplo.com",
+    "companyPh": "Nome do condomínio ou administradora",
+    "phonePh": "+55 11 99999-9999",
+    "messagePh": "Ex.: precisamos controlar visitantes, encomendas e reservas de áreas comuns.",
+    "responseTime": "Respondemos em até 1 dia útil.",
+    "sending": "Enviando...",
+    "send": "Enviar",
+    "success": "Recebido! Vamos entrar em contato em breve.",
+    "error": "Não foi possível enviar. Tente novamente."
+  },
+  "footer": {
+    "tagline": "Feito para simplificar a rotina do condomínio, agilizar o trabalho da portaria e dar transparência e autonomia ao morador.",
+    "pages": "Páginas",
+    "home": "Início",
+    "pricing": "Preços",
+    "contact": "Contato",
+    "legal": "Legal",
+    "privacy": "Privacidade",
+    "terms": "Termos",
+    "rights": "Todos os direitos reservados.",
+    "madeWith": "Feito por Gabriel Vieira Quesada Cara para simplificar a rotina do condomínio."
+  },
+  "legal": {
+    "privacyTitle": "Política de Privacidade",
+    "privacyIntro": "Esta página descreve como tratamos os dados enviados pelo formulário de contato do Nexos.",
+    "privacyWhatWeCollectTitle": "O que coletamos",
+    "privacyWhatWeCollect1": "Dados informados por você (nome, e-mail, telefone, condomínio/administradora e mensagem).",
+    "privacyWhatWeCollect2": "Informações técnicas básicas para segurança e prevenção de abuso (ex.: IP para rate limit).",
+    "privacyHowWeUseTitle": "Como usamos",
+    "privacyHowWeUse": "Usamos os dados para responder seu contato, agendar demonstrações e melhorar nossa comunicação comercial.",
+    "privacyRetentionTitle": "Retenção",
+    "privacyRetention": "Mantemos os dados pelo tempo necessário para atender sua solicitação e cumprir obrigações legais/operacionais.",
+    "privacyContactTitle": "Contato",
+    "privacyContact": "Se tiver dúvidas sobre privacidade, fale conosco pelo e-mail exibido na seção de contato.",
+    "termsTitle": "Termos de Uso",
+    "termsIntro": "Ao usar este site e enviar o formulário, você concorda com estes termos.",
+    "termsUseTitle": "Uso do site",
+    "termsUse": "O conteúdo é informativo e pode mudar sem aviso. Você não deve usar este site para enviar dados sensíveis.",
+    "termsLiabilityTitle": "Responsabilidade",
+    "termsLiability": "O Nexos se esforça para manter o site disponível, mas não garante disponibilidade contínua. Não nos responsabilizamos por danos indiretos.",
+    "termsContactTitle": "Contato",
+    "termsContact": "Para dúvidas sobre estes termos, use os canais na seção de contato."
+  },
+  "meta": {
+    "homeTitle": "Nexos | Gestão completa de condomínio",
+    "homeDescription": "Controle visitantes, encomendas, moradores, áreas comuns, reservas e eventos em um só lugar.",
+    "pricingTitle": "Preços | Nexos",
+    "pricingDescription": "Planos para o tamanho do seu condomínio — comece simples e cresça com previsibilidade.",
+    "privacyTitle": "Privacidade | Nexos",
+    "privacyDescription": "Como tratamos os dados coletados na landing page do Nexos.",
+    "termsTitle": "Termos | Nexos",
+    "termsDescription": "Termos de uso desta landing page e do contato comercial."
+  }
+}
