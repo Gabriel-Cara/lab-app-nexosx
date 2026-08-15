@@ -1,0 +1,214 @@
+{
+  "main": {
+    "id": "598cf0fe34446b09",
+    "type": "split",
+    "children": [
+      {
+        "id": "a5037ec1d8b4a396",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "8d4f0ce48a1a9c92",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "ANALISE_GAPS_SISTEMA.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "ANALISE_GAPS_SISTEMA"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "6a5fba72ca02f346",
+    "type": "split",
+    "children": [
+      {
+        "id": "d9279d9fd34bce64",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a084df14e45e1719",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Explorador de arquivos"
+            }
+          },
+          {
+            "id": "9d9f8766721939f7",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Procurar"
+            }
+          },
+          {
+            "id": "912f29572f4618cc",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Marcadores"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "324b3fb3cc955e04",
+    "type": "split",
+    "children": [
+      {
+        "id": "3b73e0ad0be5bd36",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "093bbeff37b4a656",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "ANALISE_GAPS_SISTEMA.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Links inversos"
+            }
+          },
+          {
+            "id": "c1495cae7ded33a4",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Links de saída"
+            }
+          },
+          {
+            "id": "49511fdb14c229b0",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Etiquetas"
+            }
+          },
+          {
+            "id": "3a0e94eef3ed7ad4",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Todas as propriedades"
+            }
+          },
+          {
+            "id": "2890ff83cfe4da8e",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Sumário"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Abrir a troca rápida": false,
+      "graph:Abrir visualização em gráfico": false,
+      "canvas:Criar novo canvas": false,
+      "daily-notes:Abrir a nota de hoje": false,
+      "templates:Inserir modelo": false,
+      "command-palette:Abrir paleta de comandos": false,
+      "bases:Criar nova base": false
+    }
+  },
+  "active": "8d4f0ce48a1a9c92",
+  "lastOpenFiles": [
+    "ANALISE_GAPS_SISTEMA.md",
+    "Nexos - Apresentacao Empresarial.md",
+    "Apresentacao Nexos/02 - Papéis e Permissões.md",
+    "Apresentacao Nexos/01 - Visão Geral e Objetivo.md",
+    "Apresentacao Nexos/00 - Nexos (Início).md",
+    "Apresentacao Nexos/assets/02-admin-solicitacoes.jpg",
+    "Apresentacao Nexos/assets/01-login.jpg",
+    "Apresentacao Nexos/06 - Tour pelo Produto (Galeria).md",
+    "Apresentacao Nexos/05 - Fluxos de Negócio.md",
+    "Apresentacao Nexos/04 - Modelo de Dados.md",
+    "Apresentacao Nexos/03 - Arquitetura Técnica.md",
+    "Apresentacao Nexos/assets/18-modal-agendamento.jpg",
+    "Apresentacao Nexos/assets/17-eventos-morador.jpg",
+    "Apresentacao Nexos/assets/16-areas-morador.jpg",
+    "Apresentacao Nexos/assets/15-dashboard-morador.jpg",
+    "Apresentacao Nexos/assets/14-eventos.jpg",
+    "Apresentacao Nexos/assets/13-agendamentos.jpg",
+    "Apresentacao Nexos/assets/12-areas-lazer.jpg",
+    "Apresentacao Nexos/assets/11-encomendas.jpg",
+    "Apresentacao Nexos/assets",
+    "Apresentacao Nexos",
+    "api/prisma/demo-seed-diagnostic.ts"
+  ]
+}
