@@ -12,12 +12,12 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 
 ## Progresso geral
 
-**3 / 40 itens concluídos (8%)**
+**6 / 40 itens concluídos (15%)**
 
 | Fase | Foco | Itens | Status |
 |---|---|---|---|
 | 0 | Fundação técnica | 3 | ✅ Concluído (2026-08-16) |
-| 1 | Ativar notificações existentes | 3 | 🔲 Não iniciado |
+| 1 | Ativar notificações existentes | 3 | ✅ Concluído (2026-08-16) |
 | 2 | Completar Reservas/Áreas | 4 | 🔲 Não iniciado |
 | 3 | Completar Eventos | 3 | 🔲 Não iniciado |
 | 4 | Completar Encomendas | 4 | 🔲 Não iniciado |
@@ -45,9 +45,9 @@ Atualize a tabela acima e o contador de progresso conforme os itens forem fechad
 
 **Por que agora:** com a central pronta na Fase 0, liga os avisos que hoje morrem em `console.warn` ou simplesmente não existem — ganho de valor imediato sem precisar de módulo novo.
 
-- [ ] Alerta real de visita aberta há muito tempo (`api/src/services/visitor-status-service.ts`)
-- [ ] Notificação de aprovação/rejeição de reserva
-- [ ] Lembrete automático de evento
+- [x] Alerta real de visita aberta há muito tempo (2026-08-16) — `flagStaleOpenVisits` notifica manager/doorman do condomínio, com dedup (só uma vez por visita, não a cada execução horária do job).
+- [x] Notificação de aprovação/rejeição de reserva (2026-08-16) — `approve()`/`reject()` e o job de expiração automática (`expireStalePendingReservations`) notificam o morador com nome da área e data.
+- [x] Lembrete automático de evento (2026-08-16) — novo `event-reminder-service.ts`, job horário, notifica moradores inscritos quando o evento entra na janela de `EVENT_REMINDER_HOURS_BEFORE` (24h por padrão), com dedup por evento. Testado ao vivo (DB local + servidor): as 3 notificações foram geradas com conteúdo correto e nenhuma duplicou ao rodar o job de novo.
 
 ## Fase 2 — Completar Reservas / Áreas comuns 🟢
 
