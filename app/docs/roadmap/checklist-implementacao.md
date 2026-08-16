@@ -12,14 +12,14 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 
 ## Progresso geral
 
-**10 / 40 itens concluídos (25%)**
+**13 / 40 itens concluídos (33%)**
 
 | Fase | Foco | Itens | Status |
 |---|---|---|---|
 | 0 | Fundação técnica | 3 | ✅ Concluído (2026-08-16) |
 | 1 | Ativar notificações existentes | 3 | ✅ Concluído (2026-08-16) |
 | 2 | Completar Reservas/Áreas | 4 | ✅ Concluído (2026-08-16) |
-| 3 | Completar Eventos | 3 | 🔲 Não iniciado |
+| 3 | Completar Eventos | 3 | ✅ Concluído (2026-08-16) |
 | 4 | Completar Encomendas | 4 | 🔲 Não iniciado |
 | 5 | Portaria avançada/Visitantes | 3 | 🔲 Não iniciado |
 | 6 | Estrutura, moradores e convites | 7 | 🔲 Não iniciado |
@@ -62,9 +62,11 @@ Testado ao vivo (DB local + servidor + navegador): antecedência mínima rejeita
 
 ## Fase 3 — Completar Eventos 🟢
 
-- [ ] Cancelamento de inscrição pelo morador (`unbook`, hoje só existe `book`)
-- [ ] Lista de espera quando o evento atinge capacidade máxima
-- [ ] Check-in de presença no dia do evento
+- [x] Lista de espera quando o evento atinge capacidade máxima (2026-08-16) — `EventBooking.status` (booked/waitlisted/attended); evento cheio não rejeita mais a inscrição, entra em espera.
+- [x] Cancelamento de inscrição pelo morador (2026-08-16) — `DELETE /events/:id/book`; ao cancelar uma vaga confirmada, promove automaticamente o primeiro da lista de espera e notifica.
+- [x] Check-in de presença no dia do evento (2026-08-16) — `PATCH /events/:id/check-in`, restrito a admin/manager/doorman; não permite check-in de quem está na lista de espera.
+
+Testado ao vivo (DB local + servidor + navegador): evento com capacidade 2, 3º inscrito foi pra lista de espera, cancelamento do 1º promoveu o da fila com notificação real, check-in confirmado por dois residentes diferentes refletindo "Presença confirmada" na hora tanto pro morador quanto pro painel do gestor.
 
 ## Fase 4 — Completar Encomendas 🟢
 
