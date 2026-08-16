@@ -1,0 +1,44 @@
+{
+  "nodes": [
+    {"id": "title", "type": "text", "x": 0, "y": -260, "width": 900, "height": 180, "text": "# 🧭 Sequência de Implementação — Roadmap NexosX\n\nOrdem lógica e linear de aplicação das melhorias listadas em `melhorias-nexosx.md`. Cada fase entrega valor por si só e prepara terreno para a próxima — sem pular etapas nem construir sobre coisa que ainda não existe.\n\nAcompanhamento item a item: `checklist-implementacao.md`."},
+
+    {"id": "fase0", "type": "text", "x": 0, "y": 0, "width": 900, "height": 240, "color": "1", "text": "## 🔴 Fase 0 — Fundação técnica\nCorrige o único mock visível do sistema e constrói a infraestrutura que quase todo o resto do roadmap vai depender.\n\n- Editar perfil de verdade (corrige bug visível hoje)\n- Central de notificações in-app\n- Auditoria centralizada"},
+
+    {"id": "fase1", "type": "text", "x": 0, "y": 300, "width": 900, "height": 240, "color": "1", "text": "## 🔴 Fase 1 — Ativar notificações no que já existe\nCom a central pronta na Fase 0, liga os avisos que hoje morrem em `console.warn` ou simplesmente não existem.\n\n- Alerta real de visita aberta há muito tempo\n- Notificação de aprovação/rejeição de reserva\n- Lembrete automático de evento"},
+
+    {"id": "fase2", "type": "text", "x": 0, "y": 600, "width": 900, "height": 270, "color": "4", "text": "## 🟢 Fase 2 — Completar Reservas / Áreas comuns\nFecha o módulo mais maduro do sistema com os recursos que já foram identificados como faltantes.\n\n- Recorrência de reserva\n- Limite de reservas por morador/período\n- Antecedência mínima configurável\n- Calendário mensal consolidado"},
+
+    {"id": "fase3", "type": "text", "x": 0, "y": 930, "width": 900, "height": 240, "color": "4", "text": "## 🟢 Fase 3 — Completar Eventos\n\n- Cancelamento de inscrição pelo morador (`unbook`)\n- Lista de espera quando lotado\n- Check-in de presença"},
+
+    {"id": "fase4", "type": "text", "x": 0, "y": 1230, "width": 900, "height": 270, "color": "4", "text": "## 🟢 Fase 4 — Completar Encomendas\n\n- Filtro por status/morador na listagem\n- Retirada por terceiro autorizado\n- Assinatura/foto no ato da retirada\n- Dashboard de volume/histórico"},
+
+    {"id": "fase5", "type": "text", "x": 0, "y": 1560, "width": 900, "height": 240, "color": "4", "text": "## 🟢 Fase 5 — Portaria avançada / Visitantes\n\n- Pré-cadastro com QR code\n- Lista de visitantes frequentes/recorrentes\n- Blocklist de visitantes"},
+
+    {"id": "fase6", "type": "text", "x": 0, "y": 1860, "width": 900, "height": 370, "color": "4", "text": "## 🟢 Fase 6 — Estrutura, moradores e convites\n\n- Desativação temporária de morador\n- Import em massa de moradores\n- Histórico de ocupação de blocos\n- Distinção proprietário/inquilino\n- Estender convites para manager/admin\n- Anexos no formulário de solicitação de condomínio\n- Galeria de múltiplas imagens"},
+
+    {"id": "fase7", "type": "text", "x": 0, "y": 2290, "width": 900, "height": 300, "color": "4", "text": "## 🟢 Fase 7 — Ferramentas de gestão e admin\n\n- Dashboard do admin da plataforma\n- Configurações por condomínio (tenant-level)\n- Central de convites pendentes\n- Reenvio de convite não utilizado\n- Relatórios com exportação CSV"},
+
+    {"id": "fase8", "type": "text", "x": 0, "y": 2650, "width": 900, "height": 200, "color": "6", "text": "## 🟣 Fase 8 — Comunicação e engajamento\nUsa a central de notificações da Fase 0 pra entregar valor de verdade.\n\n- Mural de comunicados\n- Push notifications nativas (Web Push)"},
+
+    {"id": "fase9", "type": "text", "x": 0, "y": 2910, "width": 900, "height": 240, "color": "6", "text": "## 🟣 Fase 9 — Novos módulos operacionais (baixa/média complexidade)\n\n- Documentos/Atas\n- Chamados de manutenção/suporte\n- Relatórios/BI agregados"},
+
+    {"id": "fase10", "type": "text", "x": 0, "y": 3210, "width": 900, "height": 200, "color": "6", "text": "## 🟣 Fase 10 — Módulos de alto valor / alta complexidade\nSe beneficiam diretamente da auditoria centralizada já construída na Fase 0.\n\n- Financeiro/Taxas condominiais\n- Assembleias/Votação digital"},
+
+    {"id": "fase11", "type": "text", "x": 0, "y": 3470, "width": 900, "height": 170, "color": "6", "text": "## 🟣 Fase 11 — Fronteira tecnológica\n\n- Integração com hardware de portaria (interfone IP, catraca, leitor de placa, câmeras)"},
+
+    {"id": "legend", "type": "text", "x": 0, "y": 3700, "width": 900, "height": 130, "text": "**Como ler este mapa**\n🔴 Fundação (bloqueia o resto do roadmap) · 🟢 Completude dos módulos que já existem · 🟣 Novos módulos e comunicação\n\nCada fase pode virar um ciclo de trabalho próprio. Progresso item a item: `checklist-implementacao.md`."}
+  ],
+  "edges": [
+    {"id": "e1", "fromNode": "fase0", "fromSide": "bottom", "toNode": "fase1", "toSide": "top"},
+    {"id": "e2", "fromNode": "fase1", "fromSide": "bottom", "toNode": "fase2", "toSide": "top"},
+    {"id": "e3", "fromNode": "fase2", "fromSide": "bottom", "toNode": "fase3", "toSide": "top"},
+    {"id": "e4", "fromNode": "fase3", "fromSide": "bottom", "toNode": "fase4", "toSide": "top"},
+    {"id": "e5", "fromNode": "fase4", "fromSide": "bottom", "toNode": "fase5", "toSide": "top"},
+    {"id": "e6", "fromNode": "fase5", "fromSide": "bottom", "toNode": "fase6", "toSide": "top"},
+    {"id": "e7", "fromNode": "fase6", "fromSide": "bottom", "toNode": "fase7", "toSide": "top"},
+    {"id": "e8", "fromNode": "fase7", "fromSide": "bottom", "toNode": "fase8", "toSide": "top"},
+    {"id": "e9", "fromNode": "fase8", "fromSide": "bottom", "toNode": "fase9", "toSide": "top"},
+    {"id": "e10", "fromNode": "fase9", "fromSide": "bottom", "toNode": "fase10", "toSide": "top"},
+    {"id": "e11", "fromNode": "fase10", "fromSide": "bottom", "toNode": "fase11", "toSide": "top"}
+  ]
+}
