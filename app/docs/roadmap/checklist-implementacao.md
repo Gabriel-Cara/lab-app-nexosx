@@ -12,13 +12,13 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 
 ## Progresso geral
 
-**6 / 40 itens concluídos (15%)**
+**10 / 40 itens concluídos (25%)**
 
 | Fase | Foco | Itens | Status |
 |---|---|---|---|
 | 0 | Fundação técnica | 3 | ✅ Concluído (2026-08-16) |
 | 1 | Ativar notificações existentes | 3 | ✅ Concluído (2026-08-16) |
-| 2 | Completar Reservas/Áreas | 4 | 🔲 Não iniciado |
+| 2 | Completar Reservas/Áreas | 4 | ✅ Concluído (2026-08-16) |
 | 3 | Completar Eventos | 3 | 🔲 Não iniciado |
 | 4 | Completar Encomendas | 4 | 🔲 Não iniciado |
 | 5 | Portaria avançada/Visitantes | 3 | 🔲 Não iniciado |
@@ -53,10 +53,12 @@ Atualize a tabela acima e o contador de progresso conforme os itens forem fechad
 
 **Por que agora:** é o módulo mais maduro do sistema — fechar as lacunas dele antes de abrir módulo novo mantém o foco em profundidade antes de amplitude.
 
-- [ ] Recorrência de reserva (reservar o mesmo horário toda semana)
-- [ ] Limite de reservas por morador/período
-- [ ] Antecedência mínima configurável
-- [ ] Calendário mensal consolidado (visão de todas as áreas)
+- [x] Antecedência mínima configurável (2026-08-16) — `RESERVATION_MIN_LEAD_HOURS` (2h padrão), validada contra o horário real do slot, não só a data.
+- [x] Limite de reservas por morador/período (2026-08-16) — `RESERVATION_ACTIVE_LIMIT_PER_RESIDENT` (4 padrão), conta reservas pendentes/aprovadas futuras do morador.
+- [x] Recorrência de reserva (2026-08-16) — `recurrenceWeeks` no `POST /reservations`, cria em série (melhor esforço: semanas com conflito ou fora da janela de 1 mês são puladas e reportadas, não derrubam a série inteira); checkbox + seletor de semanas no modal de agendamento.
+- [x] Calendário mensal consolidado (2026-08-16) — nova visão em `reservations.tsx` com todas as áreas, dias marcados por status (verde = aprovada, âmbar = só pendente), lista do dia selecionado.
+
+Testado ao vivo (DB local + servidor + navegador): antecedência mínima rejeitada corretamente, limite de 4 bloqueou a 5ª reserva, série de 5 semanas criou 4 e pulou 1 (limite atingido) reportando o motivo, calendário mostrou e atualizou as cores certas após aprovar uma reserva pelo painel.
 
 ## Fase 3 — Completar Eventos 🟢
 
