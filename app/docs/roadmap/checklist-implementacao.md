@@ -12,7 +12,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 
 ## Progresso geral
 
-**27 / 40 itens concluídos (68%)**
+**32 / 40 itens concluídos (80%)**
 
 | Fase | Foco | Itens | Status |
 |---|---|---|---|
@@ -23,7 +23,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 | 4 | Completar Encomendas | 4 | ✅ Concluído (2026-08-16) |
 | 5 | Portaria avançada/Visitantes | 3 | ✅ Concluído (2026-08-17) |
 | 6 | Estrutura, moradores e convites | 7 | ✅ Concluído (2026-08-17) |
-| 7 | Ferramentas de gestão/admin | 5 | 🔲 Não iniciado |
+| 7 | Ferramentas de gestão/admin | 5 | ✅ Concluído (2026-08-17) |
 | 8 | Comunicação e engajamento | 2 | 🔲 Não iniciado |
 | 9 | Novos módulos (baixa/média complexidade) | 3 | 🔲 Não iniciado |
 | 10 | Módulos de alto valor/complexidade | 2 | 🔲 Não iniciado |
@@ -77,6 +77,8 @@ Testado ao vivo (DB local + servidor + navegador): evento com capacidade 2, 3º 
 
 Testado ao vivo (DB local + servidor + navegador): filtro por status e por morador refletindo corretamente na lista e ignorando tentativa de um morador ver encomendas de outro; retirada via procurador cadastrado (nome/documento herdados do registro) e via "outra pessoa" com nome livre + assinatura desenhada na hora, ambas persistidas no `RetrievalLog` e conferidas direto no banco; cadastro e remoção de procurador pela tela de perfil; dashboard atualizando em tempo real após uma retirada.
 
+Corrigido de quebra (2026-08-17, achado numa bateria de regressão pós-Fase 7): o limite de tentativas do código de retirada (`PACKAGE_CODE_MAX_ATTEMPTS`) nunca travava de verdade — o incremento de `codeAttempts` acontecia dentro da mesma `$transaction` que em seguida dava `throw` pro código inválido, e o `throw` desfazia (rollback) o próprio incremento junto. Bug pré-existente desde a implementação original da Fase 4, não introduzido pela Fase 7 (que só trocou a fonte do limite de `env` fixo pra configuração por condomínio). Corrigido em `PackagesController.retrieve()` (`packages-controller.ts`): o incremento agora retorna do bloco da transação em vez de lançar erro dentro dele, e o `AppError` de "código inválido" é lançado só depois da transação já ter persistido. Adicionados 2 testes de regressão (`packages-controller.test.ts`) e verificado ao vivo: 3 tentativas erradas incrementaram `code-attempts` pra 3 no banco, a 4ª tentativa retornou `429 "Número máximo de tentativas atingido!"`.
+
 ## Fase 5 — Portaria avançada / Visitantes 🟢
 
 - [x] Pré-cadastro com QR code gerado pelo morador (2026-08-17) — morador gera um código (8 caracteres, hash SHA-256 como os tokens de convite — bcrypt não permite busca por hash) com nome/documento opcional/motivo, exibido como QR code (gerado 100% no cliente, sem chamada de rede) e mostrado só uma vez. Porteiro resgata em `/visitor-pre-registrations/redeem`: valida não-encontrado/revogado/já usado/expirado, exige documento se o morador não informou, cria a visita já como entrada direta (sem etapa de aprovação) dentro de uma transação com reconferência para evitar resgate duplo em corrida, e notifica o morador.
@@ -103,11 +105,13 @@ Testado ao vivo (DB local + servidor + navegador, como morador/gestor/porteiro/a
 
 ## Fase 7 — Ferramentas de gestão e admin 🟢
 
-- [ ] Dashboard do admin da plataforma (métricas agregadas)
-- [ ] Configurações por condomínio (tenant-level: TTLs e políticas hoje são env vars globais)
-- [ ] Central de convites pendentes (listagem de convites em aberto)
-- [ ] Reenvio de convite ainda não utilizado
-- [ ] Relatórios com exportação CSV (Encomendas, Visitantes, Reservas)
+- [x] Dashboard do admin da plataforma (2026-08-17) — `GET /admin/dashboard`: total de condomínios, usuários por cargo, solicitações por status/taxa de aprovação, crescimento de condomínios por mês (12 meses) e as 5 solicitações pendentes mais recentes. Nova tela `admin/dashboard` virou o destino padrão do admin ao logar (antes era `admin/requests`).
+- [x] Configurações por condomínio (2026-08-17) — nova tabela `CondominiumSettings` (1:1 com `Condominium`, campos nulos = usa o padrão global do `env.ts`): `visitorAuthorizationTtlHours`, `visitorPendingTtlHours`, `reservationPendingTtlHours`, `packageCodeMaxAttempts`. `GET/PUT /condominium-settings` (gestor), resolvidos via `getEffectiveCondominiumSettings()`/`getEffectiveSettingsByCondominium()` nos pontos que antes liam a env var direto (aprovação de visita, retirada de encomenda, e os dois jobs de expiração — que agora comparam cada registro pendente contra o TTL do seu próprio condomínio em vez de um deadline global único). Nova tela `condominium-settings` para o gestor.
+- [x] Central de convites pendentes (2026-08-17) — `GET /auth/doorman-invites` e `GET /auth/resident-invites` listam os convites do condomínio com status calculado (pendente/usado/revogado/expirado). Precisou de um campo novo `usedAt` em `StaffInvite`/`ResidentInvite` (antes o "uso" não era registrado em lugar nenhum — setado dentro da mesma transação do `signUp()`). Nova tela `invites`.
+- [x] Reenvio de convite ainda não utilizado (2026-08-17) — `POST /auth/doorman-invites/:id/resend` e `/auth/resident-invites/:id/resend`. Como só o hash SHA-256 do token é armazenado (nunca o token em texto puro), o link original é irrecuperável por design — "reenviar" gera um token novo na mesma linha do convite (revoga implicitamente o link anterior) e devolve o novo link pra copiar/compartilhar. Documentado no código como limitação técnica intencional, não lacuna.
+- [x] Relatórios com exportação CSV (2026-08-17) — `GET /packages/export`, `/visitors/export`, `/reservations/export` (staff apenas), reaproveitando os mesmos filtros da listagem. Botão "Exportar CSV" nas telas de Encomendas, Visitantes e Agendamentos.
+
+Testado ao vivo (DB local + servidor + navegador, como gestor e como admin da plataforma): dashboard do admin mostrando métricas reais e gráfico de crescimento com a barra do mês atual; configurações do condomínio salvando um override (testado com tentativas do código de encomenda) e voltando a mostrar o placeholder do padrão da plataforma depois de limpo; central de convites listando os 3 convites de portaria/gerência pendentes; reenvio de um convite de porteiro gerando novo link com aviso claro de que o anterior parou de funcionar; exportação CSV testada nas 3 telas (Encomendas, Visitantes, Agendamentos) com os arquivos baixados e conferidos.
 
 ## Fase 8 — Comunicação e engajamento 🟣
 
