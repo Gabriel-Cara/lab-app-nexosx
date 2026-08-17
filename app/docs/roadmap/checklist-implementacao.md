@@ -12,7 +12,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 
 ## Progresso geral
 
-**20 / 40 itens concluídos (50%)**
+**27 / 40 itens concluídos (68%)**
 
 | Fase | Foco | Itens | Status |
 |---|---|---|---|
@@ -22,7 +22,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 | 3 | Completar Eventos | 3 | ✅ Concluído (2026-08-16) |
 | 4 | Completar Encomendas | 4 | ✅ Concluído (2026-08-16) |
 | 5 | Portaria avançada/Visitantes | 3 | ✅ Concluído (2026-08-17) |
-| 6 | Estrutura, moradores e convites | 7 | 🔲 Não iniciado |
+| 6 | Estrutura, moradores e convites | 7 | ✅ Concluído (2026-08-17) |
 | 7 | Ferramentas de gestão/admin | 5 | 🔲 Não iniciado |
 | 8 | Comunicação e engajamento | 2 | 🔲 Não iniciado |
 | 9 | Novos módulos (baixa/média complexidade) | 3 | 🔲 Não iniciado |
@@ -89,13 +89,17 @@ Testado ao vivo (DB local + servidor + navegador, como morador e como porteiro):
 
 ## Fase 6 — Estrutura, moradores e convites 🟢
 
-- [ ] Desativação temporária de morador (viagem/afastamento, distinto de exclusão definitiva)
-- [ ] Import em massa de moradores no onboarding de um condomínio inteiro
-- [ ] Histórico de ocupação de blocos/unidades
-- [ ] Distinção proprietário/inquilino
-- [ ] Estender fluxo de convite para manager/admin (hoje só doorman/resident)
-- [ ] Anexos/documentos no formulário público de solicitação de condomínio
-- [ ] Galeria com múltiplas imagens por entidade (hoje é 1 `imageUrl` fixo)
+- [x] Desativação temporária de morador (2026-08-17) — `User.active/deactivatedAt/deactivatedReason/deactivatedById`; login bloqueado com mensagem clara quando a única conta com senha correta está inativa (checado depois do match de senha, pra nunca revelar existência de conta inativa por senha errada); `POST /auth/users/:id/deactivate` e `/reactivate` (admin/manager), cadastro/histórico/unidade preservados — distinto de exclusão.
+- [x] Import em massa de moradores (2026-08-17) — `POST /auth/users/bulk`, melhor esforço linha a linha (uma duplicata não derruba o lote), reaproveita a mesma resolução de residência/convite por e-mail do cadastro individual; UI cola uma lista (nome, e-mail, apartamento, torre, proprietário/inquilino) num textarea.
+- [x] Histórico de ocupação de blocos/unidades (2026-08-17) — nova tabela `ResidenceOccupancyLog` (um registro por estadia, fecha com `movedOutAt` e abre um novo ao trocar de residência), alimentada em todo ponto que muda `residenceId` (criação, edição, autocadastro por convite); `GET /residences/:id/occupancy-history`.
+- [x] Distinção proprietário/inquilino (2026-08-17) — `ResidentInfo.ownershipType` (owner/tenant, opcional — moradores antigos não têm valor definido).
+- [x] Estender fluxo de convite para manager (2026-08-17) — `StaffInvite.role`, validado com `canAssignRole` (mesma hierarquia que já existia pra `/auth/users`); "admin" continua de fora de propósito — é papel de plataforma, nunca atribuível por convite de tenant (documentado em `role-hierarchy.ts`). UI só mostra a opção "Gerente" pra quem tem permissão de convidar um.
+- [x] Anexos no formulário público de solicitação de condomínio (2026-08-17) — `CondominiumRequestAttachment`, até 5 imagens reaproveitando a mesma validação de magic-byte já usada no resto do sistema (documentos como PDF ficariam sem essa validação, por isso o escopo é só fotos de documentos).
+- [x] Galeria com múltiplas imagens por entidade (2026-08-17) — nova tabela `EntityImage`, endpoints `/entity-images` (list/upload/delete), escopada a `event` e `area` (onde uma galeria faz sentido de verdade) — `imageUrl` único continua sendo a capa, a galeria é aditiva.
+
+Corrigido de quebra: um doorman tentando uma ação restrita a admin/manager (ex: desativar morador) recebia 401 do backend — e o interceptor global do axios trata qualquer 401 como sessão expirada, deslogando o usuário em vez de mostrar "sem permissão". Comportamento pré-existente em toda a aplicação (não introduzido nesta sessão, `authorize()` sempre devolveu 401 pra role insuficiente); descoberto testando a desativação como doorman. Fora do escopo desta fase corrigir — anotado para uma futura revisão do middleware de autorização.
+
+Testado ao vivo (DB local + servidor + navegador, como morador/gestor/porteiro/admin): desativação com motivo bloqueando login (mensagem clara) e reativação liberando de novo; import colando 2 linhas com 1 duplicata proposital (criou 2, pulou 1, motivo exibido); troca de unidade de um morador mostrando `movedOutAt` na unidade antiga e "Atual" na nova; badges "Proprietário"/"Inquilino" no cadastro e na listagem; seletor de cargo no convite de portaria escondendo "Gerente" pra um gestor e permitindo pra um admin (confirmado também via curl: manager convidando manager rejeitado, admin convidando manager e o convidado assumindo o cargo certo no cadastro); anexo de solicitação pública aparecendo como miniatura clicável na tela do admin; galeria de evento listando a imagem existente e removendo com sucesso pela UI (upload múltiplo e purga de staff-only validados via curl).
 
 ## Fase 7 — Ferramentas de gestão e admin 🟢
 
