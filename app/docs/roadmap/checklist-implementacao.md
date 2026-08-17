@@ -12,7 +12,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 
 ## Progresso geral
 
-**17 / 40 itens concluídos (43%)**
+**20 / 40 itens concluídos (50%)**
 
 | Fase | Foco | Itens | Status |
 |---|---|---|---|
@@ -21,7 +21,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 | 2 | Completar Reservas/Áreas | 4 | ✅ Concluído (2026-08-16) |
 | 3 | Completar Eventos | 3 | ✅ Concluído (2026-08-16) |
 | 4 | Completar Encomendas | 4 | ✅ Concluído (2026-08-16) |
-| 5 | Portaria avançada/Visitantes | 3 | 🔲 Não iniciado |
+| 5 | Portaria avançada/Visitantes | 3 | ✅ Concluído (2026-08-17) |
 | 6 | Estrutura, moradores e convites | 7 | 🔲 Não iniciado |
 | 7 | Ferramentas de gestão/admin | 5 | 🔲 Não iniciado |
 | 8 | Comunicação e engajamento | 2 | 🔲 Não iniciado |
@@ -79,9 +79,13 @@ Testado ao vivo (DB local + servidor + navegador): filtro por status e por morad
 
 ## Fase 5 — Portaria avançada / Visitantes 🟢
 
-- [ ] Pré-cadastro com QR code gerado pelo morador
-- [ ] Lista de visitantes frequentes/recorrentes (prestadores fixos)
-- [ ] Blocklist de visitantes indesejados por condomínio
+- [x] Pré-cadastro com QR code gerado pelo morador (2026-08-17) — morador gera um código (8 caracteres, hash SHA-256 como os tokens de convite — bcrypt não permite busca por hash) com nome/documento opcional/motivo, exibido como QR code (gerado 100% no cliente, sem chamada de rede) e mostrado só uma vez. Porteiro resgata em `/visitor-pre-registrations/redeem`: valida não-encontrado/revogado/já usado/expirado, exige documento se o morador não informou, cria a visita já como entrada direta (sem etapa de aprovação) dentro de uma transação com reconferência para evitar resgate duplo em corrida, e notifica o morador.
+- [x] Lista de visitantes frequentes/recorrentes (prestadores fixos) (2026-08-17) — `GET /visitors/frequent` lista os `Visitor` com `unlimitedAccess` (opção "VIP" já existente no formulário de cadastro), escopado ao próprio morador quando ele é quem consulta; entrada rápida reaproveita o endpoint de entrada já existente.
+- [x] Blocklist de visitantes indesejados por condomínio (2026-08-17) — `Visitor.blocked/blockReason/blockedAt/blockedById`; `PATCH /visitors/:id/block` e `/unblock` (staff), com auditoria; bloqueio é checado tanto no cadastro comum (`register()`) quanto no resgate de pré-cadastro, antes de criar qualquer registro.
+
+Corrigido de quebra: `visitLogInclude` em `visitors-controller.ts` fazia `include` bruto de `host`/`handledBy` (relações para `User`), vazando o hash bcrypt da senha em toda resposta de registro/entrada/saída/aprovação/rejeição de visitante — bug pré-existente, não introduzido nesta sessão. Corrigido trocando para `{ select: userSelect }` (util já usado no resto do projeto). Verificado ao vivo via curl que a resposta não contém mais o campo `password`.
+
+Testado ao vivo (DB local + servidor + navegador, como morador e como porteiro): pré-cadastro gerado com QR e código exibidos, copiado, listado, cancelado; resgate pelo porteiro com documento preenchido na hora (quando o morador não informou), criando a visita como "Entrou" direto na lista principal; visitante VIP aparecendo na lista de frequentes (escopado por morador) com entrada rápida corretamente bloqueada quando já há visita aberta; bloqueio de visitante com e sem motivo, badge "Bloqueado" refletido na tabela principal, nova tentativa de cadastro do mesmo documento rejeitada, desbloqueio limpando o badge — corrigido um bug de cache do React Query em que o desbloqueio só atualizava o card de bloqueados e não a tabela principal (invalidação de query estava restrita demais).
 
 ## Fase 6 — Estrutura, moradores e convites 🟢
 
