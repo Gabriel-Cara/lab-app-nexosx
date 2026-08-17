@@ -12,7 +12,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 
 ## Progresso geral
 
-**13 / 40 itens concluídos (33%)**
+**17 / 40 itens concluídos (43%)**
 
 | Fase | Foco | Itens | Status |
 |---|---|---|---|
@@ -20,7 +20,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 | 1 | Ativar notificações existentes | 3 | ✅ Concluído (2026-08-16) |
 | 2 | Completar Reservas/Áreas | 4 | ✅ Concluído (2026-08-16) |
 | 3 | Completar Eventos | 3 | ✅ Concluído (2026-08-16) |
-| 4 | Completar Encomendas | 4 | 🔲 Não iniciado |
+| 4 | Completar Encomendas | 4 | ✅ Concluído (2026-08-16) |
 | 5 | Portaria avançada/Visitantes | 3 | 🔲 Não iniciado |
 | 6 | Estrutura, moradores e convites | 7 | 🔲 Não iniciado |
 | 7 | Ferramentas de gestão/admin | 5 | 🔲 Não iniciado |
@@ -70,10 +70,12 @@ Testado ao vivo (DB local + servidor + navegador): evento com capacidade 2, 3º 
 
 ## Fase 4 — Completar Encomendas 🟢
 
-- [ ] Filtro por status/morador na listagem (`api/src/controllers/packages-controller.ts:list`)
-- [ ] Retirada por terceiro autorizado (procurador cadastrado pelo morador)
-- [ ] Assinatura ou foto no ato da retirada
-- [ ] Dashboard de volume/histórico
+- [x] Filtro por status/morador na listagem (2026-08-16) — `status`/`residentId` como query params reais (não mais filtro só no cliente); moradores nunca conseguem sobrescrever o próprio escopo.
+- [x] Retirada por terceiro autorizado (2026-08-16) — moradores cadastram procuradores (nome + documento opcional) no próprio perfil; na retirada, a portaria escolhe entre "o próprio morador", um procurador cadastrado (nome/documento vêm do registro, não do que for digitado) ou "outra pessoa" com nome livre.
+- [x] Assinatura ou foto no ato da retirada (2026-08-16) — campo `proofImageUrl` no `RetrievalLog`; captura por canvas de assinatura no modal de retirada, reaproveitando a mesma validação de imagem (magic-byte + tamanho) já usada no resto do sistema.
+- [x] Dashboard de volume/histórico (2026-08-16) — `GET /packages/stats`: volume recebido/retirado por dia (30 dias por padrão), tempo médio até retirada, principais transportadoras, contagem por status/tipo.
+
+Testado ao vivo (DB local + servidor + navegador): filtro por status e por morador refletindo corretamente na lista e ignorando tentativa de um morador ver encomendas de outro; retirada via procurador cadastrado (nome/documento herdados do registro) e via "outra pessoa" com nome livre + assinatura desenhada na hora, ambas persistidas no `RetrievalLog` e conferidas direto no banco; cadastro e remoção de procurador pela tela de perfil; dashboard atualizando em tempo real após uma retirada.
 
 ## Fase 5 — Portaria avançada / Visitantes 🟢
 
