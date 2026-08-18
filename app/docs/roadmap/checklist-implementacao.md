@@ -12,7 +12,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 
 ## Progresso geral
 
-**37 / 40 itens concluídos (93%)**
+**39 / 40 itens concluídos (98%)**
 
 | Fase | Foco | Itens | Status |
 |---|---|---|---|
@@ -26,7 +26,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 | 7 | Ferramentas de gestão/admin | 5 | ✅ Concluído (2026-08-17) |
 | 8 | Comunicação e engajamento | 2 | ✅ Concluído (2026-08-17) |
 | 9 | Novos módulos (baixa/média complexidade) | 3 | ✅ Concluído (2026-08-18) |
-| 10 | Módulos de alto valor/complexidade | 2 | 🔲 Não iniciado |
+| 10 | Módulos de alto valor/complexidade | 2 | ✅ Concluído (2026-08-18) |
 | 11 | Fronteira tecnológica | 1 | 🔲 Não iniciado |
 
 Atualize a tabela acima e o contador de progresso conforme os itens forem fechados.
@@ -136,8 +136,14 @@ Corrigido de quebra: um Service Worker de produção (registrado numa sessão de
 
 **Por que por último entre os módulos:** se beneficiam diretamente da auditoria centralizada (Fase 0) e envolvem maior complexidade/risco (gateway de pagamento, regras de quórum).
 
-- [ ] Financeiro/Taxas condominiais (boleto, inadimplência, prestação de contas)
-- [ ] Assembleias/Votação digital (quórum e votação remota)
+- [x] Financeiro/Taxas condominiais (2026-08-18) — novo modelo `Charge`, integração real com Asaas (sandbox) via `services/payments/asaas-client.ts`: `POST /charges/generate` gera cobrança pra cada morador (melhor esforço — um morador sem CPF cadastrado não derruba o lote, fica registrado como cobrança manual sem boleto), cria cliente + boleto/PIX de verdade no Asaas quando há CPF, e persiste o link real do boleto (`asaasInvoiceUrl`). `PATCH /charges/:id/mark-paid` (baixa manual, cancela o boleto no Asaas pra não cobrar duas vezes), `DELETE /charges/:id` (cancelar), `GET /charges/summary` (taxa de arrecadação = presta-ção de contas), webhook `POST /charges/webhook/asaas` (protegido por token compartilhado, atualiza status via `PAYMENT_RECEIVED`/`PAYMENT_CONFIRMED`/`PAYMENT_OVERDUE`) e um job horário que marca cobrança manual vencida como `overdue` (inadimplência) mesmo sem gateway configurado. Novo campo `cpf` em `ResidentInfo` com validação de dígito verificador (`utils/cpf.ts`), editável pelo gestor no cadastro/edição do morador.
+- [x] Assembleias/Votação digital (2026-08-18) — novos modelos `Assembly`/`AssemblyAgendaItem`/`AssemblyVote`. Gestor cria pauta com itens, abre e encerra a votação; morador vota sim/não/abstenção por item, podendo trocar o voto enquanto estiver aberta. Voto secreto por design — a API nunca expõe o voto individual de outro morador, só a contagem agregada e o próprio voto de quem consulta. Quórum simplificado (uma pessoa = um voto, não ponderado por fração ideal — documentado como simplificação consciente).
+
+Construído com Financeiro feito diretamente (decisões de integração externa e segurança do webhook exigiam mais cuidado) e Assembleias em paralelo por sub-agente, já que os dois módulos não compartilham nenhum dado — só schema/migração e a fiação das rotas ficaram centralizados. 17 testes novos (12 Financeiro, incluindo mock do cliente Asaas; 7 Assembleias, com teste dedicado de que nenhum voto individual vaza) — suíte completa em 145/145.
+
+Corrigido de quebra: `AssembliesController.open()`/`close()` chamavam `this.transition(...)` internamente, mas eram métodos regulares — o Express registra rotas passando o método por referência solta (`assembliesController.open`), o que destaca o `this` da instância e quebrava com `TypeError: this.transition is not a function` em toda chamada real via HTTP (os testes unitários não pegaram porque chamam `controller.open(...)` diretamente, preservando o `this`). Mesmo bug já visto antes em `visitors-controller.ts`; corrigido convertendo `open`/`close` pra arrow functions (propriedades de classe), que capturam o `this` certo na construção. Varri os outros 8 controllers novos das Fases 8-10 procurando o mesmo padrão — só esse caso existia.
+
+Testado ao vivo (DB local + servidor + navegador, como gestor e como moradores de teste): chave sandbox real do Asaas usada em todos os testes — cliente e boleto criados de verdade (`https://sandbox.asaas.com/i/...`, confirmado acessível via HTTP 200), melhor esforço confirmado (20 cobranças geradas, 19 sem CPF ficaram como cobrança manual com motivo, 1 com CPF gerou boleto real); baixa manual testada (com cancelamento automático do boleto associado no Asaas) e bloqueada corretamente numa cobrança já paga; webhook testado com token errado (401) e correto (200, status atualizado pra "paid" com o método de pagamento certo vindo do payload); resumo/taxa de arrecadação conferido. Assembleia: 2 moradores votando sim/contra no mesmo item (resultado "Recusado", 1x1), morador trocando de voto, staff bloqueado de votar (403), quórum calculado certo (2 de 20 = 10%, abaixo do mínimo de 30%), voto após encerrar corretamente rejeitado (400), e a tela de detalhe mostrando quórum/resultado/contagem sem nenhum voto individual exposto.
 
 ## Fase 11 — Fronteira tecnológica 🟣
 
