@@ -12,7 +12,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 
 ## Progresso geral
 
-**32 / 40 itens concluídos (80%)**
+**34 / 40 itens concluídos (85%)**
 
 | Fase | Foco | Itens | Status |
 |---|---|---|---|
@@ -24,7 +24,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 | 5 | Portaria avançada/Visitantes | 3 | ✅ Concluído (2026-08-17) |
 | 6 | Estrutura, moradores e convites | 7 | ✅ Concluído (2026-08-17) |
 | 7 | Ferramentas de gestão/admin | 5 | ✅ Concluído (2026-08-17) |
-| 8 | Comunicação e engajamento | 2 | 🔲 Não iniciado |
+| 8 | Comunicação e engajamento | 2 | ✅ Concluído (2026-08-17) |
 | 9 | Novos módulos (baixa/média complexidade) | 3 | 🔲 Não iniciado |
 | 10 | Módulos de alto valor/complexidade | 2 | 🔲 Não iniciado |
 | 11 | Fronteira tecnológica | 1 | 🔲 Não iniciado |
@@ -117,8 +117,10 @@ Testado ao vivo (DB local + servidor + navegador, como gestor e como admin da pl
 
 **Por que agora:** depende diretamente da central de notificações construída na Fase 0 pra ter valor de verdade.
 
-- [ ] Mural de comunicados (broadcast do síndico, geral ou por bloco)
-- [ ] Push notifications nativas (Web Push, além de SMS/WhatsApp)
+- [x] Mural de comunicados (2026-08-17) — nova tabela `Announcement` (condomínio inteiro ou escopado a um `Block`); ao publicar, gera `Notification` (type `announcement`, já existia no enum desde a Fase 0) pra cada morador do escopo via `createNotifications`. `GET/POST /announcements`, tela `Mural` (compositor pro gestor, feed somente-leitura pros demais). Lista do morador filtra automaticamente pelo próprio bloco.
+- [x] Push notifications nativas (2026-08-17) — Web Push (VAPID) além de SMS/WhatsApp. Nova tabela `PushSubscription`; `POST/DELETE /push-subscriptions`; envio integrado direto em `notification-center-service.ts` (fire-and-forget, nunca bloqueia nem derruba a criação da notificação in-app), então toda notificação existente no sistema já dispara push automaticamente, sem precisar tocar em cada call site. Frontend trocou a estratégia do `vite-plugin-pwa` de `generateSW` pra `injectManifest` com um `src/sw.ts` customizado (mantém o precache/fallback de SPA de antes e adiciona os handlers `push`/`notificationclick`); card "Notificações push" na tela de perfil com toggle ativar/desativar.
+
+Testado ao vivo (DB local + servidor + navegador, como gestor e como morador): comunicado geral e comunicado escopado a um bloco publicados via API e conferidos no banco — só os moradores do bloco certo receberam a `Notification` do segundo; tela do Mural renderizando certo pros dois perfis (compositor + seletor de bloco pro gestor, feed somente-leitura pro morador, badge "Todos os blocos" vs. nome do bloco). Push: build de produção gera o `sw.js` customizado corretamente (confirmado via `npm run preview`, 92 entradas de precache) e o service worker registra e assume o controle da página (`navigator.serviceWorker.controller` verificado via console); endpoints de subscribe/unsubscribe testados via curl (persistência e remoção corretas no banco); disparo de notificação com uma subscription inválida confirmado não-bloqueante (erro capturado e logado, a notificação in-app e a resposta da API seguem normais). **Não verificado ao vivo**: o recebimento real de uma notificação push do SO — o prompt nativo de permissão do Chrome (`Notification.requestPermission()`) não é interagível pela ferramenta de automação de navegador usada nesta sessão (é UI do browser, fora do DOM da página). Fica pendente de um teste manual num navegador real: abrir `/profile`, clicar em "Ativar neste dispositivo", conceder a permissão, e então publicar um comunicado ou aprovar uma reserva de outro perfil pra confirmar a notificação chegando.
 
 ## Fase 9 — Novos módulos operacionais (baixa/média complexidade) 🟣
 
