@@ -12,7 +12,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 
 ## Progresso geral
 
-**34 / 40 itens concluídos (85%)**
+**37 / 40 itens concluídos (93%)**
 
 | Fase | Foco | Itens | Status |
 |---|---|---|---|
@@ -25,7 +25,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 | 6 | Estrutura, moradores e convites | 7 | ✅ Concluído (2026-08-17) |
 | 7 | Ferramentas de gestão/admin | 5 | ✅ Concluído (2026-08-17) |
 | 8 | Comunicação e engajamento | 2 | ✅ Concluído (2026-08-17) |
-| 9 | Novos módulos (baixa/média complexidade) | 3 | 🔲 Não iniciado |
+| 9 | Novos módulos (baixa/média complexidade) | 3 | ✅ Concluído (2026-08-18) |
 | 10 | Módulos de alto valor/complexidade | 2 | 🔲 Não iniciado |
 | 11 | Fronteira tecnológica | 1 | 🔲 Não iniciado |
 
@@ -124,9 +124,13 @@ Testado ao vivo (DB local + servidor + navegador, como gestor e como morador): c
 
 ## Fase 9 — Novos módulos operacionais (baixa/média complexidade) 🟣
 
-- [ ] Documentos/Atas (regimento interno, atas de assembleia)
-- [ ] Chamados de manutenção/suporte (reaproveita a máquina de estados de Package/Visitor)
-- [ ] Relatórios/BI agregados (ocupação, volume, taxa de aprovação — dados já existem)
+- [x] Documentos/Atas (2026-08-18) — novo modelo `Document` (`title`, `category`: regimento/ata/outro, `fileUrl`, `fileName`, `uploadedById`). Aceita PDF (`%PDF-`) e imagem (PNG/JPEG/GIF/WEBP), validação de magic-byte própria (`document-schemas.ts`) já que o validador de imagem existente é image-only por design. `GET/POST /documents` (upload restrito a gestor), `DELETE /documents/:id`. Tela "Documentos" com upload por diálogo e listagem/preview/remoção.
+- [x] Chamados de manutenção/suporte (2026-08-18) — novo modelo `MaintenanceRequest` reaproveitando o padrão de máquina de estados de `Package`/`Visitor` (transição guardada por `updateMany` com `status: {in: [...]}` no `where`, checando `count === 0` pra rejeitar transição inválida). Qualquer morador abre um chamado (título, descrição, categoria livre, foto opcional); gestor/porteiro transicionam `pending`→`in_progress`/`cancelled`, `in_progress`→`resolved`/`cancelled` (atalho `pending`→`resolved` também permitido, pra chamado já resolvido na hora); cada mudança de status notifica o morador (`maintenance_status_changed`, novo valor no enum `NotificationType` — e portanto já dispara push também, graças à integração feita na Fase 8). Tela "Chamados": morador vê só os próprios, staff vê todos com filtro de status e botões de transição contextuais.
+- [x] Relatórios/BI agregados (2026-08-18) — `GET /reports/overview` (gestor): taxa de ocupação (geral e por bloco), reservas por status + taxa de aprovação, visitantes por status + taxa de aprovação — tudo agregado sobre dados já existentes, nenhum modelo novo. Tela "Relatórios" com cards, gráficos de barra e uma tabela de ocupação por bloco; reaproveita `/packages/stats` (Fase 4) pro volume de encomendas e os exports CSV de encomendas/visitantes/reservas (Fase 7), reunindo tudo num só lugar pela primeira vez.
+
+Construído com 3 sub-agentes em paralelo (um por item), já que os três módulos são independentes entre si — só o schema do Prisma, a migração e a fiação das rotas (`routes/index.ts`, `routes/config.tsx`) ficaram centralizados numa única pessoa (evita corrida em arquivo compartilhado e estado de migração). Cada sub-agente também escreveu seus próprios testes unitários (16 novos: 5 Documentos, 5 Chamados, 6 Relatórios) — suíte completa em 126/126. Testado ao vivo (DB local + servidor + navegador, como gestor e como morador): upload/listagem/remoção de documento; ciclo completo de chamado (abertura → "em atendimento" → "resolvido", com transição inválida `resolved`→`in_progress` corretamente bloqueada com 400, e morador notificado a cada mudança); página de relatórios com números conferidos direto no banco (16 residências, 14 ocupadas = 88%, 2 reservas aprovadas = 100%, 8 visitantes aprovados = 100%).
+
+Corrigido de quebra: um Service Worker de produção (registrado numa sessão de teste anterior via `npm run preview`, Fase 8) ficou ativo em `localhost:5173` servindo o build antigo em cache por cima do servidor de dev — o sidebar não mostrava as telas novas até o SW e o cache serem limpos manualmente no navegador. Não é um bug no código, é um artefato de teste; documentado aqui porque pode confundir qualquer um testando localmente depois de já ter rodado `npm run preview` uma vez.
 
 ## Fase 10 — Módulos de alto valor / alta complexidade 🟣
 
