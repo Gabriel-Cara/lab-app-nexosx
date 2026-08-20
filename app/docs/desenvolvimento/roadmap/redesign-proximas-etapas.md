@@ -74,6 +74,16 @@ Usuário notou inconsistência: algumas tabelas ficavam alinhadas com o `CardTit
 
 **Fix: remover `p-0`, deixar `CardContent` herdar o `px-6` padrão** (Card já dá `py-6`/`gap-6` verticalmente, então não precisa de padding extra) — em **Blocos, Residências, Documentos, Chamados, Visitantes (+ skeleton), Encomendas (+ skeleton) e Agendamentos**. Em `reservations-table.tsx` também removidos os `<div className="p-6">` que compensavam manualmente o `p-0` ao redor do `EmptyState` (agora redundante com o `px-6` do `CardContent`). Validado nos dois temas. **Se criar uma tabela nova: nunca usar `CardContent className="p-0"` — deixar o padrão herdado, é isso que alinha com o título.**
 
+### Lote 7 — hierarquia de botões de ação (commit `b0d839b`)
+
+Usuário notou que vários pares de botões de ação (ex. Chamados: "Iniciar atendimento" e "Marcar como resolvido") usavam `variant="outline"` genérico, indistinguível de qualquer outro botão neutro da tela, sem se destacar do "Cancelar" ao lado.
+
+Fiz um levantamento em todo o app antes de mexer — a maioria dos pares já seguia uma convenção boa (`default` sólido pra ação principal + `outline`/`destructive` pra secundária): Aprovar/Rejeitar (reservas, solicitações de condomínio), Autorizar/Negar (visitantes), Editar/Deletar (eventos), Abrir/Encerrar votação (assembleias), botões de ícone com tint de cor (reativar/desativar morador, retirar/editar/excluir encomenda). **Só Chamados e Financeiro estavam com o par principal genérico.**
+
+**Fix**: ação de progressão (`Iniciar atendimento`/`Marcar como resolvido` em Chamados, `Marcar paga` em Financeiro) virou `variant="default"` (sólido, com ícone) — vs `Cancelar` que virou `variant="outline"` + `className="text-destructive hover:text-destructive"` (era `ghost`, sutil demais pra uma ação que muda o status de um recurso real). O X de revogar convite em Convites ganhou o mesmo tint destructive. `Boleto/PIX` em Financeiro ficou como estava (`outline` neutro) — é uma ação utilitária, não uma decisão, não precisa competir visualmente com `Marcar paga`.
+
+**Convenção pra próximos botões**: ação principal/recomendada da linha = `default`; ação secundária neutra (visualizar, exportar, boleto) = `outline`; ação que cancela/reverte um recurso real (não um dialog) = `outline` + `text-destructive`; ação irreversível (deletar, bloquear) = `destructive` sólido.
+
 ---
 
 ## Lição aprendida sobre o calendário (não repetir o mesmo erro)
