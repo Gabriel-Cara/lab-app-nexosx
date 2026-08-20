@@ -84,6 +84,20 @@ Fiz um levantamento em todo o app antes de mexer — a maioria dos pares já seg
 
 **Convenção pra próximos botões**: ação principal/recomendada da linha = `default`; ação secundária neutra (visualizar, exportar, boleto) = `outline`; ação que cancela/reverte um recurso real (não um dialog) = `outline` + `text-destructive`; ação irreversível (deletar, bloquear) = `destructive` sólido.
 
+### Lote 8 — sidebar agrupada e colapsável (commit `3e77bd6`)
+
+Usuário achou a sidebar com "muita informação de navegação" — lista plana de até 18 itens (papel gestor) sem nenhuma divisão. Pediu pra dividir usando os subcomponentes do Sidebar do shadcn, e depois (num segundo pedido, mesmo commit) pra também deixar colapsável pra ícones, sem mudar a estrutura de grupos.
+
+**Agrupamento**: `routes/config.tsx` ganhou um campo `sidebarGroup` por rota (tipo `SidebarGroupId`) + `sidebarGroupLabels`/`sidebarGroupOrder` exportados. `AppSidebar` (`app-sidebar.tsx`) agora agrupa `sidebarNavigation` por `group` e renderiza um `SidebarGroup`/`SidebarGroupLabel`/`SidebarMenu` por seção — só as seções com pelo menos 1 item visível pro papel do usuário são renderizadas (por isso o morador vê bem menos grupos que o gestor). 7 grupos: **Principal** (Home), **Comunicação** (Mural/Documentos/Assembleias), **Operação diária** (Chamados/Visitantes/Encomendas), **Pessoas e estrutura** (Blocos/Residências/Moradores/Portaria/Convites), **Reservas e eventos** (Áreas de Lazer/Agendamentos/Eventos), **Financeiro** (Financeiro/Relatórios), **Configurações**.
+
+Nessa migração também corrigi um uso indevido pré-existente: a lista inteira estava dentro de `SidebarMenuSub`/`SidebarMenuSubItem` (pensados pra submenu **aninhado** sob um item pai colapsável, com indent e borda esquerda), sem nenhum pai — trocado pra `SidebarMenu`/`SidebarMenuItem` (nível superior, sem indent), que é o componente certo pra esse caso.
+
+**Colapsável**: `<Sidebar variant="floating">` ganhou `collapsible="icon"` (o shadcn já vem com todo o CSS pra esse modo — só faltava habilitar). Adicionado `<SidebarTrigger />` no `SidebarHeader`, ao lado do logo (logo+texto somem quando colapsado via `group-data-[collapsible=icon]:hidden`, só o trigger fica, centralizado). `NavLink` ganhou a prop `tooltip={title}` no `SidebarMenuButton` — sem isso, os ícones colapsados ficam sem nenhuma forma de identificação; o tooltip nativo do componente já cuida disso (usa Radix Tooltip, `delayDuration={0}`, só aparece com sidebar colapsada — ver `SidebarMenuButton` em `ui/sidebar.tsx`). `AccountMenu` (rodapé) precisou de ajuste manual — é um `Button` customizado, não usa `SidebarMenuButton`, então não herda o comportamento automático: nome/cargo/chevron ganharam `group-data-[collapsible=icon]:hidden`, avatar encolhe de `h-10 w-10` pra `h-8 w-8`. `SidebarGroupLabel` já esconde sozinho quando colapsado (`opacity-0` + margin negativa, nativo do componente) — não precisou de nada ali.
+
+Estado persiste via cookie (`sidebar_state`, comportamento nativo do `SidebarProvider`) — não implementei nada de persistência manual. No mobile o `Sidebar` sempre renderiza como `Sheet` (overlay), independente do `collapsible` — o modo ícone só existe em desktop, então não tem regressão no mobile.
+
+**Se mexer na sidebar de novo**: qualquer item de rodapé/cabeçalho que não seja `SidebarMenuButton` (`AccountMenu`, o header do logo) precisa de `group-data-[collapsible=icon]:*` manual — não é automático como nos itens de navegação normais.
+
 ---
 
 ## Lição aprendida sobre o calendário (não repetir o mesmo erro)
