@@ -68,6 +68,12 @@ Processo desta rodada, digno de nota porque fugiu do fluxo padrão (mockup únic
 6. Validado ao vivo com as 3 personas (`manager@nexosx.com.br`, `joao.silva@nexosx.com.br` como morador, `porteiro@nexosx.com.br`), modo de edição (máscara de telefone, cancelar restaura valores), troca de abas preservando estado do formulário (React Hook Form v7 não desregistra campos ao desmontar por padrão).
 7. Portado pro `web` (`diff -rq lab/src web/src` → só `profile.tsx` + `tabs.tsx` novo), `tsc -b --force` + `build` + `lint` limpos, smoke test no tema escuro do `web` (porta `:5180`).
 
+### Lote 6 — padronização de padding das tabelas (commit `242997c`)
+
+Usuário notou inconsistência: algumas tabelas ficavam alinhadas com o `CardTitle` (padrão de Financeiro), outras coladas na borda do card. Causa: `<CardContent className="p-0">` em vez do `<CardContent>` padrão (`px-6`) — usado originalmente pra deixar hover/borda da `TableRow` sangrar até a borda do card, mas quebrava o alinhamento do texto com o título.
+
+**Fix: remover `p-0`, deixar `CardContent` herdar o `px-6` padrão** (Card já dá `py-6`/`gap-6` verticalmente, então não precisa de padding extra) — em **Blocos, Residências, Documentos, Chamados, Visitantes (+ skeleton), Encomendas (+ skeleton) e Agendamentos**. Em `reservations-table.tsx` também removidos os `<div className="p-6">` que compensavam manualmente o `p-0` ao redor do `EmptyState` (agora redundante com o `px-6` do `CardContent`). Validado nos dois temas. **Se criar uma tabela nova: nunca usar `CardContent className="p-0"` — deixar o padrão herdado, é isso que alinha com o título.**
+
 ---
 
 ## Lição aprendida sobre o calendário (não repetir o mesmo erro)
