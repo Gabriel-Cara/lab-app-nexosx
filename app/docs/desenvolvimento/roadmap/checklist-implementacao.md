@@ -159,6 +159,14 @@ Corrigido de quebra (achado em produção, não é bug da Fase 10): o webhook do
 - [x] Paginação/busca em Admin > Usuários (2026-08-20) — `GET /admin/users` ganhou page/limit/search/role/condominiumId; tela ganhou busca + 2 filtros + paginação. Corrigido no caminho: `exposedHeaders` ausente no CORS (`api/src/app.ts`) escondia `total-count` de **toda** listagem paginada do frontend, não só admin.
 - [x] Importação de moradores via upload de planilha `.xlsx`/`.csv` (2026-08-20) — troca de textarea por upload real (parse client-side, modelo pra baixar, preview antes de confirmar). Backend: pré-fetch de e-mails existentes + processamento em lote paralelo (concorrência limitada a 10) em vez de sequencial — 200 linhas de 95,8s para ~15,6s, validado sob concorrência real (duplicata intra-arquivo detectada corretamente).
 
+**Achados não bloqueantes da mesma triagem, resolvidos em 2026-08-25** (usuário pediu explicitamente pra seguir pra esses depois dos 2 bloqueantes):
+
+- [x] Validação silenciosa no formulário de Chamados (2026-08-25) — Título/Descrição ganharam `aria-required`/`aria-invalid`, reaproveitando a regra CSS global já existente no design system (asterisco vermelho no label + borda vermelha no campo com erro após tentativa de envio).
+- [x] Ações que o porteiro não pode executar escondidas da UI (2026-08-25) — botão de ativar/desativar morador e "Importar planilha" (ambos manager/admin-only no backend) agora só renderizam pro papel que pode de fato executar a ação.
+- [x] Redesign visual do painel admin (2026-08-25) — Dashboard, Solicitações, Condomínios e Usuários ganharam `PageHeader` + `Card`/`CardHeader`/`CardContent` (duas telas tinham a tabela solta, sem `Card` nenhum); Solicitações trocou o `Select` avulso por `SegmentedFilter` dentro do `CardHeader`, mesmo padrão usado no resto do app.
+- [x] Teste dedicado pra `condominiums-controller.ts` (2026-08-25) — 3 casos (duplicata de código rejeitada antes de tocar o banco, provisionamento condomínio+gestor em transação com `role` forçado server-side e sem vazar hash de senha na resposta, listagem ordenada). Suíte completa em 148/148.
+- [~] Rate-limit de login por IP — mantido como está, por decisão explícita do usuário (2026-08-25). Só mexer se virar reclamação real de cliente com Wi-Fi/NAT compartilhado.
+
 ---
 
 ## Notas de acompanhamento
