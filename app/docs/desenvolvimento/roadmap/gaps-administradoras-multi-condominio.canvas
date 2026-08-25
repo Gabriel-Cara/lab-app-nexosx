@@ -1,0 +1,36 @@
+{
+	"nodes":[
+		{"id":"colA-header","type":"text","text":"## 🔵 Ângulo A — Visibilidade comercial\nO founder tem CRM de verdade sobre seus clientes?","x":0,"y":160,"width":460,"height":160,"color":"5"},
+		{"id":"colB-header","type":"text","text":"## 🟣 Ângulo B — Produto multi-condomínio\nO sistema serve bem quem administra vários condomínios?","x":520,"y":160,"width":460,"height":160,"color":"6"},
+		{"id":"b1","type":"text","text":"**B1. `User.condominiumId` é escalar único**\n✅ RESOLVIDO — `organizationId` em `User`/`Condominium`; `condominiumId` do usuário org-scoped virou \"condomínio ativo\" mutável.","x":520,"y":360,"width":460,"height":190,"color":"1"},
+		{"id":"b2","type":"text","text":"**B2. `Role` sem papel multi-condomínio**\n✅ RESOLVIDO sem tocar no enum — `organizationId` setado já expressa \"administra uma carteira\".","x":520,"y":570,"width":460,"height":170,"color":"1"},
+		{"id":"b3","type":"text","text":"**B3. JWT carrega um único `condominiumId`**\n✅ RESOLVIDO (na prática) — continua 1 `condominiumId` no JWT, mas agora mutável via `PATCH /auth/active-condominium`, sem reemitir token.","x":520,"y":760,"width":460,"height":190,"color":"1"},
+		{"id":"b4","type":"text","text":"**B4. Login multi-conta é picker one-shot**\n✅ RESOLVIDO — seletor \"Trocar condomínio\" no menu de conta, troca sem logout.","x":520,"y":970,"width":460,"height":190,"color":"1"},
+		{"id":"b5","type":"text","text":"**B5. Nenhuma agregação cross-condomínio existe**\nZero paths agregam dado entre condomínios hoje. **MVP possível já sob a opção (a) do Fork.**","x":520,"y":1180,"width":460,"height":190,"color":"6"},
+		{"id":"b6","type":"text","text":"**B6. Sem home/dashboard de portfólio**\nToda tela é escopada a 1 condomínio, inclusive o dashboard do manager. Proposta: tela \"Minha Carteira\".","x":520,"y":1390,"width":460,"height":190,"color":"6"},
+		{"id":"b7","type":"text","text":"**B7. `admin/condominiums.tsx` sem hierarquia por administradora**\nSimétrico ao A6 — depende de existir a `Organization` (Fork opção b).","x":520,"y":1600,"width":460,"height":170,"color":"6"},
+		{"id":"colC-header","type":"text","text":"## 🟡 Gap adicional — múltiplos papéis no mesmo condomínio\nFora do escopo original (Ângulo A/B), mas mesma raiz: modelo de dados rígido demais pra combinações reais de pessoa×papel×condomínio.","x":0,"y":1990,"width":980,"height":110,"color":"3"},
+		{"id":"c1","type":"text","text":"**C1. Uma pessoa não acumula papéis no mesmo condomínio**\n`Role` é valor único por `User`; `@@unique([condominiumId,email])` impede até 2 contas com o mesmo e-mail no mesmo condomínio; convite de staff nunca cria vínculo de residência. Ex: síndico/porteiro que também mora no condomínio que administra.","x":0,"y":2120,"width":980,"height":190,"color":"3"},
+		{"id":"legend","type":"text","text":"**Legenda**\n🔴 Fundação técnica / decisão do Fork · 🔵 Ângulo A — CRM/comercial · 🟣 Ângulo B — produto multi-condomínio · 🟡 Gap adicional (múltiplos papéis)\n✅ RESOLVIDO (2026-08-25) · 🟡 PARCIAL · sem marcação = ⏳ pendente","x":480,"y":2360,"width":940,"height":140},
+		{"id":"a1","type":"text","text":"**A1. Sem conceito de \"cliente\"/administradora**\n🟡 PARCIAL — entidade `Organization` já existe (Fork resolvido), mas nenhuma tela do founder agrupa condomínios/leads por administradora ainda.","x":0,"y":360,"width":460,"height":170,"color":"1"},
+		{"id":"a2","type":"text","text":"**A2. Intake não qualifica lead**\n`CondominiumRequest` só tem nome/código/admin/senha/imagens — sem empresa, sem \"quantos condomínios\", sem origem, sem notas.","x":0,"y":550,"width":460,"height":170,"color":"5"},
+		{"id":"a3","type":"text","text":"**A3. Solicitações do mesmo administrador não se vinculam**\nSem chave de agrupamento — 4 pedidos de uma administradora de 4 prédios parecem 4 clientes distintos.","x":0,"y":740,"width":460,"height":170,"color":"5"},
+		{"id":"a4","type":"text","text":"**A4. Dashboard é operacional, não comercial**\n5 métricas agregadas + pending/approved/rejected — sem funil de vendas nem priorização de quem ligar.","x":0,"y":930,"width":460,"height":190,"color":"5"},
+		{"id":"a5","type":"text","text":"**A5. Sem status de assinatura do cliente-SaaS**\n`Condominium` não tem plano/tier; `Charge` é condomínio→morador, nada a ver com o que se cobra da administradora.","x":0,"y":1140,"width":460,"height":170,"color":"5"},
+		{"id":"a6","type":"text","text":"**A6. Gestão de condomínios é lista plana**\n`admin/condominiums.tsx`: sem busca/filtro/detalhe/histórico de relacionamento.","x":0,"y":1330,"width":460,"height":170,"color":"5"},
+		{"id":"title","type":"text","text":"# 🔍 Gaps Estratégicos — Administradoras & Multi-Condomínio\n\nCruzamento de duas dúvidas do founder: visibilidade comercial (founder → clientes) e funcionalidade multi-condo (produto → administrador, seu cliente principal). Versão detalhada: `gaps-administradoras-multi-condominio.md`","x":0,"y":-400,"width":980,"height":200},
+		{"id":"fork","type":"text","text":"## 🔴 Fork arquitetural — decisão central\n\n✅ RESOLVIDO (2026-08-25): opção (b) escolhida e implementada — model `Organization` 1:N (não N:N) com `Condominium`, sem precisar de JWT multi-escopo (sessão vira mutável via endpoint de troca).\n\n**A1 e toda a Fundação da Coluna B dependiam desta decisão.**","x":0,"y":-160,"width":980,"height":240,"color":"1"}
+	],
+	"edges":[
+		{"id":"e1","fromNode":"fork","fromSide":"bottom","toNode":"a1","toSide":"top"},
+		{"id":"e2","fromNode":"fork","fromSide":"bottom","toNode":"b1","toSide":"top"},
+		{"id":"e3","fromNode":"b1","fromSide":"bottom","toNode":"b3","toSide":"top"},
+		{"id":"e4","fromNode":"b3","fromSide":"bottom","toNode":"b4","toSide":"top"},
+		{"id":"e5","fromNode":"b3","fromSide":"bottom","toNode":"b5","toSide":"top"},
+		{"id":"e6","fromNode":"b5","fromSide":"bottom","toNode":"b6","toSide":"top"},
+		{"id":"e7","fromNode":"a1","fromSide":"right","toNode":"a4","toSide":"left"},
+		{"id":"e8","fromNode":"a2","fromSide":"right","toNode":"a4","toSide":"left"},
+		{"id":"e9","fromNode":"a1","fromSide":"bottom","toNode":"a6","toSide":"top"},
+		{"id":"e10","fromNode":"colC-header","fromSide":"bottom","toNode":"c1","toSide":"top"}
+	]
+}
