@@ -1,0 +1,24 @@
+{
+	"nodes":[
+		{"id":"title","type":"text","text":"# 🧭 Mapa de Usuários do Sistema — NexosX\n\nQuem toca o sistema, o que precisa, e como se relaciona. Administrador (papel de plataforma) ≠ Administradora (empresa multi-condomínio) — nomes parecidos, camadas diferentes. Versão detalhada: `mapa-usuarios-sistema.md`","x":0,"y":-420,"width":1400,"height":200},
+		{"id":"admin-plataforma","type":"text","text":"## 🔴 Administrador (plataforma)\n`role: admin`\norganizationId: nunca\ncondominiumId: nunca\n\nOpera o negócio SaaS, não um condomínio. Vê: dashboard agregado, solicitações, lista de condomínios/usuários.\n\n**Falta**: visão comercial/CRM (Ângulo A do doc de gaps).","x":460,"y":-120,"width":480,"height":260,"color":"1"},
+		{"id":"administradora","type":"text","text":"## 🟣 Administradora (Organization)\nNÃO é um valor de `Role` — é o model `Organization`, carregada por um usuário `role: manager` com `organizationId` preenchido.\n\n**Hoje**: tela \"Minha Carteira\" (drill-in operacional por condomínio) + seletor de condomínio ativo.\n\n**Proposta do founder**: visão PRIMÁRIA = gestão dos síndicos/condomínios do portfólio; \"olhar por dentro\" vira SECUNDÁRIO, sob demanda.","x":160,"y":240,"width":520,"height":320,"color":"6"},
+		{"id":"sindico-standalone","type":"text","text":"## 🟢 Síndico standalone\n`role: manager`, organizationId: null\n\nGerencia 1 condomínio só. Persona mais completo hoje — acesso a todo o operacional (moradores, financeiro, chamados, assembleias, etc.)","x":760,"y":240,"width":480,"height":220,"color":"4"},
+		{"id":"fork-nota","type":"text","text":"## ⚠️ Fork exposto por este reframe (não resolvido)\nHoje, o \"síndico\" de cada condomínio da Administradora é a MESMA pessoa/conta da Administradora, só trocando de condomínio ativo — não existe \"síndico funcionário distinto por condomínio\".\n\nSe a Administradora vai \"gerir síndicos\", o founder precisa decidir: são pessoas diferentes (precisa de nova camada de permissão) ou é sempre a mesma pessoa trocando de chapéu (modelo atual já serve)?","x":160,"y":620,"width":520,"height":280,"color":"2"},
+		{"id":"condominio","type":"text","text":"## 🏢 Condomínio\nUnidade central do sistema. Pertence a 0 ou 1 `Organization` (`organizationId`). Tem exatamente 1 usuário `manager` vinculado por vez (`condominiumId`).","x":460,"y":960,"width":480,"height":180,"color":"5"},
+		{"id":"porteiro","type":"text","text":"## 🟢 Porteiro\n`role: doorman`\n1 condominiumId, nunca organizationId\n\nEscopo operacional/portaria: encomendas, visitantes, chamados. Sem acesso a financeiro/configurações.","x":100,"y":1220,"width":420,"height":190,"color":"4"},
+		{"id":"morador","type":"text","text":"## 🟢 Morador\n`role: resident`\n1 condominiumId + 1 residenceId\n\nUsuário final: reservas, encomendas, visitantes pré-cadastrados, chamados, assembleias, mural, cobranças.","x":560,"y":1220,"width":420,"height":190,"color":"4"},
+		{"id":"sindico-ativo","type":"text","text":"## 🟢 Síndico ativo (dentro do condomínio)\nO usuário `manager` vinculado àquele `condominiumId` no momento — seja um síndico standalone, seja o gestor de uma Administradora com aquele condomínio como ativo.","x":1020,"y":1220,"width":420,"height":190,"color":"4"},
+		{"id":"legend","type":"text","text":"**Legenda**\n🔴 Papel de plataforma (Role=admin) · 🟣 Organization (não é um Role) · 🟢 Papel de condomínio (Role=manager/doorman/resident) · 🟡/⚠️ Decisão em aberto do founder","x":460,"y":1470,"width":480,"height":120}
+	],
+	"edges":[
+		{"id":"e1","fromNode":"admin-plataforma","fromSide":"bottom","toNode":"administradora","toSide":"top"},
+		{"id":"e2","fromNode":"admin-plataforma","fromSide":"bottom","toNode":"sindico-standalone","toSide":"top"},
+		{"id":"e3","fromNode":"administradora","fromSide":"bottom","toNode":"fork-nota","toSide":"top"},
+		{"id":"e4","fromNode":"administradora","fromSide":"right","toNode":"condominio","toSide":"left"},
+		{"id":"e5","fromNode":"sindico-standalone","fromSide":"bottom","toNode":"condominio","toSide":"top"},
+		{"id":"e6","fromNode":"condominio","fromSide":"bottom","toNode":"porteiro","toSide":"top"},
+		{"id":"e7","fromNode":"condominio","fromSide":"bottom","toNode":"morador","toSide":"top"},
+		{"id":"e8","fromNode":"condominio","fromSide":"bottom","toNode":"sindico-ativo","toSide":"top"}
+	]
+}

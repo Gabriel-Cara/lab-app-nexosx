@@ -1,0 +1,21 @@
+{
+	"nodes":[
+		{"id":"title","type":"text","text":"# 💼 Business Model Canvas — NexosX\n\nOs 9 blocos clássicos (Osterwalder) aplicados ao NexosX como negócio. Versão detalhada: `modelo-de-negocio.md`","x":0,"y":-280,"width":1400,"height":160},
+		{"id":"partners","type":"text","text":"## 🤝 Parcerias-chave\n\n- Asaas (gateway de pagamento, já integrado)\n- Infra (hosting, banco, e-mail/SMS)\n- Parcerias comerciais: **em aberto**","x":0,"y":-80,"width":280,"height":460,"color":"6"},
+		{"id":"activities","type":"text","text":"## 🔧 Atividades-chave\n\n- Desenvolvimento do produto (api + web)\n- Segurança/prontidão de produção (auditoria 15/08, triagem 20/08)\n- Prospecção e vendas (hoje manual)\n- Suporte ao cliente","x":300,"y":-80,"width":280,"height":220,"color":"6"},
+		{"id":"resources","type":"text","text":"## 🏗️ Recursos principais\n\n- Plataforma NexosX (api + web)\n- Modelo multi-tenant (condominiumId + organizationId)\n- Integração Asaas\n- Tempo/conhecimento do founder","x":300,"y":160,"width":280,"height":220,"color":"6"},
+		{"id":"value","type":"text","text":"## 💎 Proposta de valor\n\nEncomendas, visitantes, reservas, financeiro (Asaas), chamados, assembleias digitais, mural, documentos, push.\n\n**Novo (2026-08-25):** 1 conta para toda a carteira multi-condomínio, troca sem logout, Minha Carteira.\n\n🟡 Falta a camada de **gestão** (síndicos), só existe drill-down operacional hoje.","x":600,"y":-80,"width":300,"height":460,"color":"1"},
+		{"id":"relationship","type":"text","text":"## 🤝 Relacionamento com clientes\n\nHoje: transacional e manual (solicitação → aprovação → suporte ad-hoc).\n\n⏳ Sem qualificação de lead (A2), sem vínculo entre solicitações da mesma administradora (A3), sem funil comercial (A4).","x":940,"y":-80,"width":280,"height":220,"color":"5"},
+		{"id":"channels","type":"text","text":"## 📣 Canais\n\n- Formulário público \"Solicitar condomínio\"\n- Prospecção direta do founder (sem ferramenta de apoio)\n- Outros canais: **em aberto**","x":940,"y":160,"width":280,"height":220,"color":"5"},
+		{"id":"segments","type":"text","text":"## 🎯 Segmentos de clientes\n\n- Síndico de condomínio único\n- Administradora multi-condomínio (foco atual de prospecção)\n\nPorteiros/moradores = usuários, não clientes pagantes.","x":1240,"y":-80,"width":280,"height":460,"color":"5"},
+		{"id":"costs","type":"text","text":"## 💸 Estrutura de custos\n\nInfra (hosting, banco), integrações (Asaas, Twilio/Resend, push), tempo de desenvolvimento. Qualitativo — sem números declarados.","x":0,"y":420,"width":700,"height":180,"color":"3"},
+		{"id":"revenue","type":"text","text":"## 💰 Fontes de receita\n\n🔴 **Não definido no produto.** `Condominium` não tem plano/tier/status (A5). Em aberto: cobrar por condomínio, por carteira, ou por usuário? Plano único ou tiers?","x":720,"y":420,"width":700,"height":180,"color":"1"},
+		{"id":"closing","type":"text","text":"**Nota de fechamento**\n\nO founder é dono das Atividades-chave e do relacionamento com Segmentos de clientes — ele roda o negócio, não os condomínios. Implicação direta: os documentos irmãos (mapa de usuários, arquitetura da administradora) devem refletir essa separação — visão administrativa de clientes pro founder, visão de **gestão** de síndicos pra administradora.","x":0,"y":640,"width":1520,"height":140}
+	],
+	"edges":[
+		{"id":"e1","fromNode":"segments","fromSide":"left","toNode":"value","toSide":"right"},
+		{"id":"e2","fromNode":"value","fromSide":"left","toNode":"activities","toSide":"right"},
+		{"id":"e3","fromNode":"relationship","fromSide":"bottom","toNode":"revenue","toSide":"top"},
+		{"id":"e4","fromNode":"activities","fromSide":"bottom","toNode":"costs","toSide":"top"}
+	]
+}

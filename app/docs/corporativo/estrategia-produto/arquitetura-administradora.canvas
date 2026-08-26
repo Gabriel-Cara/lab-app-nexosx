@@ -1,0 +1,30 @@
+{
+	"nodes":[
+		{"id":"title","type":"text","text":"# 🏛️ Arquitetura da Experiência da Administradora\n\nReframe pedido pelo founder: \"gerir os síndicos\" como visão primária, \"olhar por dentro\" (Minha Carteira, já entregue) como ação secundária. Versão detalhada: `arquitetura-administradora.md`","x":0,"y":-420,"width":1000,"height":190},
+		{"id":"fork","type":"text","text":"## 🔴 Fork conceitual — o que significa \"gerir os síndicos\"?\n\nHoje não existe um síndico como pessoa distinta de quem é dono da carteira (B1/B2 já resolvidos como \"organizationId = administra uma carteira\", não \"delega pra outra pessoa\").\n\n**Decisão do founder, não deste documento.**","x":0,"y":-190,"width":1000,"height":220,"color":"1"},
+		{"id":"opt-a-header","type":"text","text":"## 🟢 Opção (a) — gestão relacional\nSem 2ª camada de contas. Visão de portfólio com sinais de saúde por condomínio.","x":0,"y":90,"width":480,"height":140,"color":"4"},
+		{"id":"opt-a-1","type":"text","text":"**Reaproveita o que já existe**\n`GET /organizations/me/portfolio-summary` já faz o fan-out por condomínio — muda só quais métricas e como a tela lê.","x":0,"y":250,"width":480,"height":160,"color":"4"},
+		{"id":"opt-a-2","type":"text","text":"**Custo**\nZero mudança de schema/auth. Reprioriza B5/B6/B7 do gaps doc com recorte \"gestão\" em vez de \"operação\". Entrega rápida.","x":0,"y":430,"width":480,"height":150,"color":"4"},
+		{"id":"opt-a-3","type":"text","text":"**Limite**\nNão gerencia pessoas de fato — é visão de dados sobre condomínios, o \"síndico\" continua sendo a própria administradora.","x":0,"y":600,"width":480,"height":140,"color":"4"},
+		{"id":"opt-b-header","type":"text","text":"## 🟣 Opção (b) — síndico como pessoa distinta\nModelo hierárquico real: administradora atribui/supervisiona contas de síndico por condomínio.","x":520,"y":90,"width":480,"height":140,"color":"6"},
+		{"id":"opt-b-1","type":"text","text":"**O que precisaria existir**\nRelacionamento \"quem é o síndico deste condomínio, atribuído por qual administradora\" — não existe hoje (`addMember` só anexa a própria conta org-scoped).","x":520,"y":250,"width":480,"height":160,"color":"6"},
+		{"id":"opt-b-2","type":"text","text":"**Custo**\nToca convite/staff + permissões (o que a administradora vê/faz em nome do síndico). Comparável em escopo ao próprio Fork que criou `Organization`.","x":520,"y":430,"width":480,"height":150,"color":"6"},
+		{"id":"opt-b-3","type":"text","text":"**Ganho**\nResolve \"gerir síndicos\" no sentido literal — gestão de pessoas, não só de dados agregados.","x":520,"y":600,"width":480,"height":140,"color":"6"},
+		{"id":"screens","type":"text","text":"## 🖥️ Arquitetura de telas proposta (assumindo opção a)\n\n**Painel de Gestão** (nova landing) → lista de condomínios com saúde/inadimplência/chamados/contato\n↓ drill-down\n**Minha Carteira / Ver por dentro** (rebaixada) → o grid de 4 métricas + trocar condomínio, exatamente como já entregue\n\n**Seletor \"Trocar condomínio\"** (menu de conta) → fica como está, ortogonal a qual landing vence","x":0,"y":790,"width":1000,"height":260},
+		{"id":"data-gaps","type":"text","text":"## 📊 Dado novo pro Painel de Gestão\n\n✅ Inadimplência → já existe (`Charge`)\n✅ Chamados abertos → já existe (`MaintenanceRequest`)\n🟡 Contato do síndico local → parcial, sem campo dedicado hoje\n❌ Última atividade / \"condomínio esquecido\" → não existe em lugar nenhum do sistema\n❌ Status de saúde (ativo/atenção/crítico) → seria derivado, decisão de produto em aberto","x":0,"y":1090,"width":1000,"height":230,"color":"3"},
+		{"id":"legend","type":"text","text":"**Legenda**\n🔴 Fork / decisão do founder · 🟢 Opção (a) — rápida, sem schema novo · 🟣 Opção (b) — hierarquia real, projeto maior · 🟡 Gaps de dado pra viabilizar a visão de gestão","x":0,"y":1360,"width":1000,"height":110}
+	],
+	"edges":[
+		{"id":"e1","fromNode":"fork","fromSide":"bottom","toNode":"opt-a-header","toSide":"top"},
+		{"id":"e2","fromNode":"fork","fromSide":"bottom","toNode":"opt-b-header","toSide":"top"},
+		{"id":"e3","fromNode":"opt-a-header","fromSide":"bottom","toNode":"opt-a-1","toSide":"top"},
+		{"id":"e4","fromNode":"opt-a-1","fromSide":"bottom","toNode":"opt-a-2","toSide":"top"},
+		{"id":"e5","fromNode":"opt-a-2","fromSide":"bottom","toNode":"opt-a-3","toSide":"top"},
+		{"id":"e6","fromNode":"opt-b-header","fromSide":"bottom","toNode":"opt-b-1","toSide":"top"},
+		{"id":"e7","fromNode":"opt-b-1","fromSide":"bottom","toNode":"opt-b-2","toSide":"top"},
+		{"id":"e8","fromNode":"opt-b-2","fromSide":"bottom","toNode":"opt-b-3","toSide":"top"},
+		{"id":"e9","fromNode":"opt-a-3","fromSide":"bottom","toNode":"screens","toSide":"top"},
+		{"id":"e10","fromNode":"opt-b-3","fromSide":"bottom","toNode":"screens","toSide":"top"},
+		{"id":"e11","fromNode":"screens","fromSide":"bottom","toNode":"data-gaps","toSide":"top"}
+	]
+}
