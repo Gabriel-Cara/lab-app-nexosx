@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Home · NexosX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../shared/tokens.css" />
+  <link rel="stylesheet" href="../shared/base.css" />
+  <link rel="stylesheet" href="../shared/components.css" />
+  <style>
+    /* ---- Page-specific additions (dashboard only) — composed from existing tokens, no new colors ---- */
+
+    .quick-actions { grid-template-columns: repeat(4, 1fr); }
+    @media (max-width: 760px) { .quick-actions { grid-template-columns: repeat(2, 1fr); } }
+
+    .quick-action {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-3);
+      padding: var(--space-6) var(--space-4);
+      text-align: center;
+      cursor: pointer;
+    }
+    .quick-action-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .quick-action-icon svg.icon { width: 24px; height: 24px; }
+    .quick-action-icon.tone-accent { background: var(--accent-50); color: var(--accent-600); }
+    .quick-action-icon.tone-warning { background: var(--warning-50); color: var(--warning-600); }
+    .quick-action-icon.tone-info { background: var(--info-50); color: var(--info-600); }
+    .quick-action-icon.tone-success { background: var(--success-50); color: var(--success-600); }
+    .quick-action-label { font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--text-primary); }
+    .quick-action-hint { font-size: var(--text-xs); color: var(--text-tertiary); }
+
+    .two-col { grid-template-columns: 1fr 1fr; align-items: start; }
+    @media (max-width: 960px) { .two-col { grid-template-columns: 1fr; } }
+
+    .mini-col { grid-template-columns: 1fr 1fr; }
+    @media (max-width: 760px) { .mini-col { grid-template-columns: 1fr; } }
+
+    .sparkline { width: 100%; height: 92px; display: block; }
+    .sparkline .bar-recv { fill: var(--accent-500); }
+    .sparkline .bar-ret { fill: var(--gray-300); }
+    .sparkline text { font-size: 8px; fill: var(--text-tertiary); font-family: var(--font-sans); text-anchor: middle; }
+
+    .legend-dot { width: 8px; height: 8px; border-radius: var(--radius-full); display: inline-block; }
+    .legend-dot.dot-accent { background: var(--accent-500); }
+    .legend-dot.dot-gray { background: var(--gray-300); }
+    .legend-dot.dot-warning { background: var(--warning-500); }
+    .legend-dot.dot-info { background: var(--info-500); }
+    .legend-dot.dot-success { background: var(--success-500); }
+    .legend-dot.dot-muted { background: var(--gray-300); }
+    .legend-dot.dot-danger { background: var(--danger-500); }
+
+    .status-bar { display: flex; height: 10px; border-radius: var(--radius-full); overflow: hidden; background: var(--gray-100); }
+    .status-bar span { height: 100%; }
+    .status-bar .st-pending { background: var(--warning-500); }
+    .status-bar .st-authorized { background: var(--info-500); }
+    .status-bar .st-entered { background: var(--success-500); }
+    .status-bar .st-left { background: var(--gray-300); }
+    .status-bar .st-denied { background: var(--danger-500); }
+
+    .status-legend { display: flex; flex-wrap: wrap; gap: var(--space-4); margin-top: var(--space-3); }
+    .status-legend-item { display: inline-flex; align-items: center; gap: 6px; font-size: var(--text-xs); color: var(--text-secondary); }
+
+    .list-heading {
+      font-size: var(--text-2xs);
+      font-weight: var(--weight-semibold);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-tertiary);
+      margin-bottom: var(--space-2);
+    }
+
+    .list-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-3) 0; border-bottom: 1px dashed var(--border-subtle); }
+    .list-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .list-row .meta { display: flex; align-items: center; gap: var(--space-2); flex-shrink: 0; }
+
+    .amenity-row { display: flex; align-items: center; justify-content: space-between; padding: var(--space-2) 0; }
+    .amenity-row .amenity-name { display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-sm); font-weight: var(--weight-medium); }
+    .amenity-row .amenity-name svg.icon { width: 16px; height: 16px; color: var(--text-tertiary); }
+  </style>
+</head>
+<body>
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <defs>
+      <g id="ico-defaults" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></g>
+    </defs>
+
+    <symbol id="home" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 10v9a1 1 0 0 0 1 1H9a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h2.5a1 1 0 0 0 1-1v-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+
+    <symbol id="megaphone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11v3a1 1 0 0 0 1 1h1l1.5 5h2L8 15"/><path d="M4 11 17 5v13L4 12"/><path d="M17 8.5c1.7.4 3 2 3 3.7s-1.3 3.3-3 3.7"/></symbol>
+
+    <symbol id="file-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v4h4"/><path d="M9 13h6M9 17h6M9 9h2"/></symbol>
+
+    <symbol id="wrench" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.6 4.9L4 16.3V20h3.7l5.1-5.1a4 4 0 0 0 4.9-5.6l-2.6 2.6-2-2 2.6-2.6Z"/></symbol>
+
+    <symbol id="dollar-sign" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 6.5c0-1.9-2.2-3-5-3s-5 1.2-5 3 2 2.7 5 3.3 5 1.6 5 3.4-2.2 3-5 3-5-1-5-2.8"/></symbol>
+
+    <symbol id="vote" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12.5 11 14.5 15.5 9.5"/><rect x="3.5" y="4" width="17" height="16" rx="2"/></symbol>
+
+    <symbol id="building" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="10" height="18" rx="1"/><path d="M14 8h6v13h-6"/><path d="M7.5 7h1M11 7h1M7.5 11h1M11 11h1M7.5 15h1M11 15h1M17 12h1M17 16h1"/></symbol>
+
+    <symbol id="users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16.5 5.5a3 3 0 0 1 0 5.9"/><path d="M20.5 20c0-2.8-1.9-5.1-4.5-5.8"/></symbol>
+
+    <symbol id="user-cog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9.5" cy="7.5" r="3.5"/><path d="M3 20.5c0-3.6 2.9-6.5 6.5-6.5S16 16.9 16 20.5"/><circle cx="18.5" cy="15.5" r="2.3"/><path d="M18.5 11.8v1M18.5 18.2v1M15 15.5h1M21 15.5h1M16.2 12.7l.7.7M19.6 17.6l.7.7M20.8 12.7l-.7.7M17.3 17.6l-.7.7"/></symbol>
+
+    <symbol id="user-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20.5c0-3.6 2.9-6.5 6.5-6.5s6.5 2.9 6.5 6.5"/><path d="m15.5 12.5 1.8 1.8 3.2-3.4"/></symbol>
+
+    <symbol id="package" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 7 8.5-4.5L20.5 7 12 11.5 3.5 7Z"/><path d="M3.5 7v10l8.5 4.5 8.5-4.5V7"/><path d="M12 11.5V21"/></symbol>
+
+    <symbol id="activity" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 6.4 15.4M12 3a9 9 0 0 0-6.4 15.4"/><path d="M8 12h8"/></symbol>
+
+    <symbol id="calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M8 3v4M16 3v4M3.5 10h17"/></symbol>
+
+    <symbol id="party" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5 14.5 5a2 2 0 0 1 2.8 2.8L7 18.3"/><path d="M3 21l1.6-4.5L8 20 3 21Z"/><path d="M13 3.5l1 1M18 5.5l1 1M16 2l.6 1.4M20 8l1.4.6"/></symbol>
+
+    <symbol id="mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6 8.5 7 8.5-7"/></symbol>
+
+    <symbol id="settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3.5v2M12 18.5v2M4.9 6.4l1.4 1.4M17.7 16.2l1.4 1.4M3.5 12h2M18.5 12h2M4.9 17.6l1.4-1.4M17.7 7.8l1.4-1.4"/></symbol>
+
+    <symbol id="bar-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V10M12 20V4M19 20v-7"/><path d="M3 20h18"/></symbol>
+
+    <symbol id="search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.5-4.5"/></symbol>
+
+    <symbol id="bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10a6 6 0 1 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 14 6 10Z"/><path d="M10 19a2 2 0 0 0 4 0"/></symbol>
+
+    <symbol id="chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+
+    <symbol id="menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+
+    <symbol id="log-out" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4"/><path d="M16 17l5-5-5-5M21 12H9"/></symbol>
+
+    <symbol id="plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></symbol>
+
+    <symbol id="download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></symbol>
+
+    <symbol id="filter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6.5 7.5V19l-3 1.5v-8L4 5Z"/></symbol>
+
+    <symbol id="check-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8.5 12.5 2.3 2.3 4.7-5.1"/></symbol>
+
+    <symbol id="x-circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6m0-6-6 6"/></symbol>
+
+    <symbol id="circle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="7.5"/></symbol>
+
+    <symbol id="trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14M9 7V4.5h6V7M6.5 7l1 12.5a1 1 0 0 0 1 .9h7a1 1 0 0 0 1-.9L17.5 7"/><path d="M10 11v6M14 11v6"/></symbol>
+
+    <symbol id="arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5m0 0 6-6m-6 6 6 6"/></symbol>
+
+    <symbol id="edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L18.5 9.5a2.1 2.1 0 0 0-3-3L5 17v3Z"/><path d="M13.5 8 16 10.5"/></symbol>
+
+    <symbol id="more-horizontal" viewBox="0 0 24 24" fill="currentColor" stroke="none"><circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/></symbol>
+
+    <symbol id="upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V3m0 0 4 4m-4-4L8 7"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></symbol>
+
+    <symbol id="link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 14.5 14.5 9.5"/><path d="M12 6.5 14 4.4a3.3 3.3 0 0 1 4.7 4.7L16.6 11"/><path d="M12 17.5l-2 2.1a3.3 3.3 0 0 1-4.7-4.7L7.4 13"/></symbol>
+
+    <symbol id="qr-code" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="14" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="3.5" y="14" width="6.5" height="6.5" rx="1"/><path d="M14 14h3v3h-3zM19.5 14v6.5M14 19.5h2.2"/></symbol>
+
+    <symbol id="trending-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 16 6.5-6.5 4 4L21 6"/><path d="M15.5 6H21v5.5"/></symbol>
+
+    <symbol id="trending-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 8 6.5 6.5 4-4L21 18"/><path d="M15.5 18H21v-5.5"/></symbol>
+
+    <symbol id="wallet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5A2.5 2.5 0 0 1 5.5 5H18a1 1 0 0 1 1 1v2"/><path d="M3 7.5v10A2.5 2.5 0 0 0 5.5 20H19a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-3.2a2 2 0 0 1 0-4H19a1 1 0 0 0 1-1"/><circle cx="15.8" cy="13.5" r=".8" fill="currentColor" stroke="none"/></symbol>
+
+    <symbol id="alert-triangle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.6 4 2.9 18a1.5 1.5 0 0 0 1.3 2.2h15.6a1.5 1.5 0 0 0 1.3-2.2L13.4 4a1.5 1.5 0 0 0-2.8 0Z"/><path d="M12 10v4M12 17.2v.1"/></symbol>
+
+    <symbol id="clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></symbol>
+
+    <symbol id="car" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16V12l2-5h12l2 5v4"/><path d="M4 16h16v2.5a1 1 0 0 1-1 1h-1.5a1 1 0 0 1-1-1V17h-9v1.5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V16Z"/><circle cx="8" cy="16" r="1.4"/><circle cx="16" cy="16" r="1.4"/></symbol>
+
+    <symbol id="phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h2.8L10.5 8 8.2 9.5a11 11 0 0 0 5.8 5.8l1.5-2.3 4.5 1.2v2.8a2 2 0 0 1-2.1 2A17.5 17.5 0 0 1 4.5 5.6a2 2 0 0 1 2-2.1Z"/></symbol>
+
+    <symbol id="map-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.4 7-11.5a7 7 0 0 0-14 0C5 14.6 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></symbol>
+
+    <symbol id="shield-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 19 6v6c0 5-3 7.7-7 8.5-4-.8-7-3.5-7-8.5V6l7-2.5Z"/><path d="m9 12 2 2 4-4.3"/></symbol>
+
+    <symbol id="x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+
+    <symbol id="chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></symbol>
+
+    <symbol id="pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v4"/><path d="M7.5 10.5 6 14h12l-1.5-3.5"/><path d="M9 4h6l-.5 6.5h-5L9 4Z"/></symbol>
+
+    <symbol id="banknote" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="6.5" width="19" height="11" rx="1.5"/><circle cx="12" cy="12" r="2.6"/><path d="M6 9v.01M18 15v.01"/></symbol>
+
+    <symbol id="repeat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h13l-3-3M20 17H7l3 3"/></symbol>
+
+    <symbol id="inbox" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13.5 6 5h12l2 8.5"/><path d="M4 13.5h4.5l1 2.5h5l1-2.5H20V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-5.5Z"/></symbol>
+
+    <symbol id="sandwich" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 11h17l-1.2 3.6a2 2 0 0 1-1.9 1.4H6.6a2 2 0 0 1-1.9-1.4L3.5 11Z"/><path d="M4.5 11a7.5 5 0 0 1 15 0"/><path d="M5 16.5 4 20M19 16.5l1 3.5"/><path d="M9 11c0-.8.6-1.5 1.5-1.8M14.5 9.2c.9.3 1.5 1 1.5 1.8"/></symbol>
+  </svg>
+
+  <div class="app-shell">
+    <div class="sidebar-scrim" data-menu-toggle></div>
+
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-mark">N</div>
+        <div class="sidebar-brand-text">
+          <div class="name">nexos</div>
+          <div class="tagline">Sistema de controle</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-scroll">
+        <div class="sidebar-group">
+          <div class="sidebar-group-label">Navegação</div>
+          <ul class="stack" style="--gap: 2px">
+            <li><a href="dashboard.html" class="nav-item active"><svg class="icon"><use href="#home"></use></svg>Home</a></li>
+            <li><a href="#" class="nav-item"><svg class="icon"><use href="#megaphone"></use></svg>Mural</a></li>
+            <li><a href="#" class="nav-item"><svg class="icon"><use href="#file-text"></use></svg>Documentos</a></li>
+            <li><a href="#" class="nav-item"><svg class="icon"><use href="#wrench"></use></svg>Chamados</a></li>
+            <li><a href="financeiro.html" class="nav-item"><svg class="icon"><use href="#dollar-sign"></use></svg>Financeiro</a></li>
+            <li><a href="assembleias.html" class="nav-item"><svg class="icon"><use href="#vote"></use></svg>Assembleias</a></li>
+            <li><a href="#" class="nav-item"><svg class="icon"><use href="#building"></use></svg>Blocos</a></li>
+            <li><a href="#" class="nav-item"><svg class="icon"><use href="#home"></use></svg>Residências</a></li>
+            <li><a href="moradores.html" class="nav-item"><svg class="icon"><use href="#users"></use></svg>Moradores</a></li>
+            <li><a href="#" class="nav-item"><svg class="icon"><use href="#user-cog"></use></svg>Portaria</a></li>
+            <li><a href="visitantes.html" class="nav-item"><svg class="icon"><use href="#user-check"></use></svg>Visitantes</a></li>
+            <li><a href="encomendas.html" class="nav-item"><svg class="icon"><use href="#package"></use></svg>Encomendas</a></li>
+            <li><a href="#" class="nav-item"><svg class="icon"><use href="#activity"></use></svg>Áreas de Lazer</a></li>
+            <li><a href="#" class="nav-item"><svg class="icon"><use href="#calendar"></use></svg>Agendamentos</a></li>
+            <li><a href="#" class="nav-item"><svg class="icon"><use href="#party"></use></svg>Eventos</a></li>
+            <li><a href="#" class="nav-item"><svg class="icon"><use href="#mail"></use></svg>Convites</a></li>
+            <li><a href="#" class="nav-item"><svg class="icon"><use href="#settings"></use></svg>Configurações</a></li>
+            <li><a href="#" class="nav-item"><svg class="icon"><use href="#bar-chart"></use></svg>Relatórios</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-chip">
+          <div class="avatar">GD</div>
+          <div class="who">
+            <div class="name">Gestor Demo</div>
+            <div class="role">Síndico(a) · Condomínio Demo</div>
+          </div>
+          <svg class="icon chevron"><use href="#chevron-down"></use></svg>
+        </div>
+      </div>
+    </aside>
+
+    <div class="content-col">
+      <header class="topbar">
+        <button class="menu-toggle" data-menu-toggle aria-label="Abrir menu">
+          <svg class="icon"><use href="#menu"></use></svg>
+        </button>
+        <div class="topbar-search">
+          <svg class="icon"><use href="#search"></use></svg>
+          <span>Buscar moradores, encomendas, chamados…</span>
+          <kbd>⌘K</kbd>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-btn" aria-label="Notificações">
+            <svg class="icon"><use href="#bell"></use></svg>
+            <span class="dot"></span>
+          </button>
+          <div class="topbar-condo">
+            <span class="label">Condomínio</span>
+            <span class="value">Condomínio Demo</span>
+          </div>
+        </div>
+      </header>
+
+      <main class="content-main">
+
+        <!-- Welcome header -->
+        <div class="page-header">
+          <div class="heading">
+            <h1 class="text-h1">Bom dia, Gestor 👋</h1>
+            <p class="text-secondary text-sm">Terça-feira, 18 de agosto de 2026 · 6 moradores, 2 blocos, Condomínio Demo</p>
+          </div>
+          <div class="actions">
+            <button class="btn btn-secondary">
+              <svg class="icon"><use href="#bar-chart"></use></svg>
+              Relatório mensal
+            </button>
+          </div>
+        </div>
+
+        <!-- Ações rápidas -->
+        <div class="grid quick-actions">
+          <a href="#" class="quick-action card card-hover">
+            <span class="quick-action-icon tone-accent"><svg class="icon"><use href="#user-check"></use></svg></span>
+            <span class="quick-action-label">Registrar visitante</span>
+            <span class="quick-action-hint">Autorizar entrada</span>
+          </a>
+          <a href="#" class="quick-action card card-hover">
+            <span class="quick-action-icon tone-warning"><svg class="icon"><use href="#package"></use></svg></span>
+            <span class="quick-action-label">Registrar encomenda</span>
+            <span class="quick-action-hint">Nova chegada na portaria</span>
+          </a>
+          <a href="#" class="quick-action card card-hover">
+            <span class="quick-action-icon tone-info"><svg class="icon"><use href="#calendar"></use></svg></span>
+            <span class="quick-action-label">Ver reservas</span>
+            <span class="quick-action-hint">Áreas de lazer</span>
+          </a>
+          <a href="#" class="quick-action card card-hover">
+            <span class="quick-action-icon tone-success"><svg class="icon"><use href="#megaphone"></use></svg></span>
+            <span class="quick-action-label">Publicar aviso</span>
+            <span class="quick-action-hint">Comunicar moradores</span>
+          </a>
+        </div>
+
+        <!-- Visão geral -->
+        <div class="grid stat-grid">
+          <div class="stat-card">
+            <div class="top">
+              <span class="stat-icon tone-warning"><svg class="icon"><use href="#package"></use></svg></span>
+              <span class="stat-trend up"><svg class="icon"><use href="#trending-up"></use></svg>+1</span>
+            </div>
+            <div class="stat-value tabular-nums">3</div>
+            <div class="stat-label">Encomendas pendentes</div>
+            <div class="stat-foot">5 já entregues essa semana</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="top">
+              <span class="stat-icon tone-info"><svg class="icon"><use href="#user-check"></use></svg></span>
+              <span class="stat-trend down"><svg class="icon"><use href="#trending-down"></use></svg>-1</span>
+            </div>
+            <div class="stat-value tabular-nums">3</div>
+            <div class="stat-label">Visitantes ativos</div>
+            <div class="stat-foot">2 visitas registradas hoje</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="top">
+              <span class="stat-icon tone-accent"><svg class="icon"><use href="#users"></use></svg></span>
+            </div>
+            <div class="stat-value tabular-nums">6</div>
+            <div class="stat-label">Moradores cadastrados</div>
+            <div class="stat-foot">100% das unidades ocupadas</div>
+          </div>
+
+          <div class="stat-card">
+            <div class="top">
+              <span class="stat-icon tone-success"><svg class="icon"><use href="#calendar"></use></svg></span>
+            </div>
+            <div class="stat-value tabular-nums">1</div>
+            <div class="stat-label">Reservas aprovadas</div>
+            <div class="stat-foot">1 pendente de aprovação</div>
+          </div>
+        </div>
+
+        <!-- Encomendas + Visitantes -->
+        <div class="grid two-col">
+
+          <div class="card">
+            <div class="card-header">
+              <div class="section-title">
+                <h2 class="text-h3">Encomendas</h2>
+                <p class="text-tertiary text-xs">Últimos 7 dias · recebidas vs. retiradas</p>
+              </div>
+              <a href="encomendas.html" class="btn btn-ghost btn-sm">
+                Ver todas
+                <svg class="icon"><use href="#chevron-right"></use></svg>
+              </a>
+            </div>
+            <div class="card-body stack" style="--gap: var(--space-6)">
+              <div>
+                <svg class="sparkline" viewBox="0 0 280 92" role="img" aria-label="Gráfico de encomendas recebidas e retiradas nos últimos 7 dias">
+                  <rect class="bar-recv" x="14" y="40" width="10" height="30" rx="2"/>
+                  <rect class="bar-ret" x="26" y="47" width="10" height="23" rx="2"/>
+                  <rect class="bar-recv" x="50" y="25" width="10" height="45" rx="2"/>
+                  <rect class="bar-ret" x="62" y="32" width="10" height="38" rx="2"/>
+                  <rect class="bar-recv" x="86" y="47" width="10" height="23" rx="2"/>
+                  <rect class="bar-ret" x="98" y="40" width="10" height="30" rx="2"/>
+                  <rect class="bar-recv" x="122" y="17" width="10" height="53" rx="2"/>
+                  <rect class="bar-ret" x="134" y="25" width="10" height="45" rx="2"/>
+                  <rect class="bar-recv" x="158" y="32" width="10" height="38" rx="2"/>
+                  <rect class="bar-ret" x="170" y="40" width="10" height="30" rx="2"/>
+                  <rect class="bar-recv" x="194" y="10" width="10" height="60" rx="2"/>
+                  <rect class="bar-ret" x="206" y="17" width="10" height="53" rx="2"/>
+                  <rect class="bar-recv" x="230" y="25" width="10" height="45" rx="2"/>
+                  <rect class="bar-ret" x="242" y="32" width="10" height="38" rx="2"/>
+                  <text x="25" y="84">Seg</text>
+                  <text x="61" y="84">Ter</text>
+                  <text x="97" y="84">Qua</text>
+                  <text x="133" y="84">Qui</text>
+                  <text x="169" y="84">Sex</text>
+                  <text x="205" y="84">Sáb</text>
+                  <text x="241" y="84">Dom</text>
+                </svg>
+                <div class="cluster" style="--gap: var(--space-4)">
+                  <span class="cluster text-xs text-secondary" style="--gap:6px"><span class="legend-dot dot-accent"></span>Recebidas</span>
+                  <span class="cluster text-xs text-secondary" style="--gap:6px"><span class="legend-dot dot-gray"></span>Retiradas</span>
+                </div>
+              </div>
+
+              <div>
+                <div class="list-heading">Pendentes mais recentes</div>
+
+                <div class="list-row">
+                  <div class="identity-cell">
+                    <div class="avatar sm">JS</div>
+                    <div class="lines">
+                      <div class="primary">Caixa Amazon</div>
+                      <div class="secondary">João Silva · Bloco A 101</div>
+                    </div>
+                  </div>
+                  <div class="meta">
+                    <span class="badge badge-warning">Pendente</span>
+                    <span class="text-xs text-tertiary">há 2h</span>
+                  </div>
+                </div>
+
+                <div class="list-row">
+                  <div class="identity-cell">
+                    <div class="avatar sm">MS</div>
+                    <div class="lines">
+                      <div class="primary">Envelope Sedex</div>
+                      <div class="secondary">Maria Souza · Bloco A 102</div>
+                    </div>
+                  </div>
+                  <div class="meta">
+                    <span class="badge badge-warning">Pendente</span>
+                    <span class="text-xs text-tertiary">há 8h</span>
+                  </div>
+                </div>
+
+                <div class="list-row">
+                  <div class="identity-cell">
+                    <div class="avatar sm">CP</div>
+                    <div class="lines">
+                      <div class="primary">iFood Marmita</div>
+                      <div class="secondary">Carlos Pereira · Bloco A 103</div>
+                    </div>
+                  </div>
+                  <div class="meta">
+                    <span class="badge badge-danger">Atrasada</span>
+                    <span class="text-xs text-tertiary">há 1 dia</span>
+                  </div>
+                </div>
+
+                <div class="list-row">
+                  <div class="identity-cell">
+                    <div class="avatar sm">AO</div>
+                    <div class="lines">
+                      <div class="primary">Pacote Correios</div>
+                      <div class="secondary">Ana Oliveira · Bloco B 101</div>
+                    </div>
+                  </div>
+                  <div class="meta">
+                    <span class="badge badge-warning">Pendente</span>
+                    <span class="text-xs text-tertiary">há 1 dia</span>
+                  </div>
+                </div>
+
+                <!-- Estado vazio (quando não há encomendas pendentes), reaproveitando .empty-state:
+                <div class="empty-state">
+                  <div class="icon-wrap"><svg class="icon"><use href="#package"></use></svg></div>
+                  <div class="title">Nenhuma encomenda pendente</div>
+                  <div class="desc">Todas as encomendas já foram retiradas pelos moradores.</div>
+                </div>
+                -->
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="section-title">
+                <h2 class="text-h3">Visitantes</h2>
+                <p class="text-tertiary text-xs">Distribuição por status · hoje</p>
+              </div>
+              <a href="visitantes.html" class="btn btn-ghost btn-sm">
+                Ver todos
+                <svg class="icon"><use href="#chevron-right"></use></svg>
+              </a>
+            </div>
+            <div class="card-body stack" style="--gap: var(--space-6)">
+              <div>
+                <div class="status-bar">
+                  <span class="st-pending" style="width:20%"></span>
+                  <span class="st-authorized" style="width:20%"></span>
+                  <span class="st-entered" style="width:20%"></span>
+                  <span class="st-left" style="width:20%"></span>
+                  <span class="st-denied" style="width:20%"></span>
+                </div>
+                <div class="status-legend">
+                  <span class="status-legend-item"><span class="legend-dot dot-warning"></span>Pendente · 1</span>
+                  <span class="status-legend-item"><span class="legend-dot dot-info"></span>Autorizado · 1</span>
+                  <span class="status-legend-item"><span class="legend-dot dot-success"></span>Entrou · 1</span>
+                  <span class="status-legend-item"><span class="legend-dot dot-muted"></span>Saiu · 1</span>
+                  <span class="status-legend-item"><span class="legend-dot dot-danger"></span>Negado · 1</span>
+                </div>
+              </div>
+
+              <div>
+                <div class="list-heading">Visitantes mais recentes</div>
+
+                <div class="list-row">
+                  <div class="identity-cell">
+                    <div class="avatar sm">RL</div>
+                    <div class="lines">
+                      <div class="primary">Rafael Lima</div>
+                      <div class="secondary">Visita João Silva · Bloco A 101</div>
+                    </div>
+                  </div>
+                  <div class="meta">
+                    <span class="badge badge-warning">Pendente</span>
+                    <span class="text-xs text-tertiary">há 15 min</span>
+                  </div>
+                </div>
+
+                <div class="list-row">
+                  <div class="identity-cell">
+                    <div class="avatar sm">FA</div>
+                    <div class="lines">
+                      <div class="primary">Fernanda Alves</div>
+                      <div class="secondary">Visita Maria Souza · Bloco A 102</div>
+                    </div>
+                  </div>
+                  <div class="meta">
+                    <span class="badge badge-info">Autorizado</span>
+                    <span class="text-xs text-tertiary">há 40 min</span>
+                  </div>
+                </div>
+
+                <div class="list-row">
+                  <div class="identity-cell">
+                    <div class="avatar sm">BC</div>
+                    <div class="lines">
+                      <div class="primary">Bruno Cardoso</div>
+                      <div class="secondary">Visita Ana Oliveira · Bloco B 101</div>
+                    </div>
+                  </div>
+                  <div class="meta">
+                    <span class="badge badge-success">Entrou</span>
+                    <span class="text-xs text-tertiary">há 1h20</span>
+                  </div>
+                </div>
+
+                <div class="list-row">
+                  <div class="identity-cell">
+                    <div class="avatar sm">DM</div>
+                    <div class="lines">
+                      <div class="primary">Diego Martins</div>
+                      <div class="secondary">Visita Beatriz Costa · Bloco B 103</div>
+                    </div>
+                  </div>
+                  <div class="meta">
+                    <span class="badge badge-danger">Negado</span>
+                    <span class="text-xs text-tertiary">há 3h</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Áreas de lazer + Próximas reservas -->
+        <div class="grid mini-col">
+
+          <div class="card">
+            <div class="card-header">
+              <div class="section-title">
+                <h2 class="text-h3">Áreas de lazer</h2>
+                <p class="text-tertiary text-xs">3 de 3 disponíveis agora</p>
+              </div>
+              <span class="stat-icon tone-success"><svg class="icon"><use href="#activity"></use></svg></span>
+            </div>
+            <div class="card-body stack" style="--gap: var(--space-1)">
+              <div class="amenity-row">
+                <span class="amenity-name"><svg class="icon"><use href="#party"></use></svg>Churrasqueira</span>
+                <span class="badge badge-success">Disponível</span>
+              </div>
+              <div class="amenity-row">
+                <span class="amenity-name"><svg class="icon"><use href="#building"></use></svg>Salão de Festa</span>
+                <span class="badge badge-success">Disponível</span>
+              </div>
+              <div class="amenity-row">
+                <span class="amenity-name"><svg class="icon"><use href="#activity"></use></svg>Quadra Multiesportiva</span>
+                <span class="badge badge-success">Disponível</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div class="section-title">
+                <h2 class="text-h3">Próximas reservas</h2>
+                <p class="text-tertiary text-xs">Aprovadas e pendentes</p>
+              </div>
+              <a href="#" class="btn btn-ghost btn-sm">
+                Ver agenda
+                <svg class="icon"><use href="#chevron-right"></use></svg>
+              </a>
+            </div>
+            <div class="card-body stack" style="--gap: var(--space-1)">
+              <div class="list-row">
+                <div class="identity-cell">
+                  <div class="avatar sm">JS</div>
+                  <div class="lines">
+                    <div class="primary">Churrasqueira</div>
+                    <div class="secondary">João Silva · daqui a 2 dias</div>
+                  </div>
+                </div>
+                <span class="badge badge-success">Aprovada</span>
+              </div>
+              <div class="list-row">
+                <div class="identity-cell">
+                  <div class="avatar sm">MS</div>
+                  <div class="lines">
+                    <div class="primary">Salão de Festa</div>
+                    <div class="secondary">Maria Souza · daqui a 5 dias</div>
+                  </div>
+                </div>
+                <span class="badge badge-warning">Pendente</span>
+              </div>
+              <div class="list-row">
+                <div class="identity-cell">
+                  <div class="avatar sm">CP</div>
+                  <div class="lines">
+                    <div class="primary">Quadra Multiesportiva</div>
+                    <div class="secondary">Carlos Pereira · solicitada há 3 dias</div>
+                  </div>
+                </div>
+                <span class="badge badge-danger">Recusada</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <script src="../shared/app.js"></script>
+</body>
+</html>

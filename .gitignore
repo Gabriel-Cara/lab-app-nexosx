@@ -8,3 +8,6 @@ frontend/node_modules
 *.log
 coverage
 .DS_Store
+app/lab
+app/docs/.obsidian
+.claude

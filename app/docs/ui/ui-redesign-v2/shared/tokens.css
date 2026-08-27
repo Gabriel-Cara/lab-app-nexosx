@@ -1,0 +1,197 @@
+/*
+  NexosX — Design tokens (v2)
+  Mesma NOMENCLATURA de variáveis do v1 (docs/ui-redesign/shared/tokens.css) —
+  para que base.css/components.css do v1 sirvam quase sem alteração — mas os
+  VALORES agora vêm fielmente do DS real do projeto:
+    web/src/index.css (shadcn "new-york", Tailwind v4, tokens OKLCH, Montserrat)
+    web/src/components/ui/badge.tsx (variant success/warning/destructive/secondary)
+    web/src/components/dashboard/overview-cards.tsx (chips sky/emerald/indigo/amber)
+  Nada aqui é cor inventada — são os valores reais usados em produção.
+*/
+
+:root {
+  /* ---- Neutros: mapeados para os tokens reais do shadcn (não é mais uma
+     escala cinza genérica — usa --background/--card/--border/--muted etc.) ---- */
+  --gray-0: oklch(1 0 0);
+  --gray-25: oklch(0.985 0 0);
+  --gray-50: oklch(0.967 0.001 286.375);   /* --secondary / --muted / --accent reais */
+  --gray-100: oklch(0.92 0.004 286.32);    /* --border / --input reais */
+  --gray-200: oklch(0.87 0.004 286.32);
+  --gray-300: oklch(0.708 0 0);            /* --ring real */
+  --gray-400: oklch(0.552 0.016 285.938);  /* --muted-foreground real */
+  --gray-500: oklch(0.44 0.01 285.9);
+  --gray-600: oklch(0.32 0.006 285.9);
+  --gray-700: oklch(0.21 0.006 285.885);   /* --secondary-foreground / --accent-foreground reais */
+  --gray-800: oklch(0.16 0.005 285.8);
+  --gray-900: oklch(0.141 0.005 285.823);  /* --foreground real (quase preto) */
+
+  /* ---- "Accent": no projeto real o botão/estado primário é neutro
+     (quase preto no claro, quase branco no escuro) — não existe roxo/indigo.
+     accent-500/600 usam --primary; accent-50/100 usam --secondary/--muted
+     (o mais próximo de um "tint" que o DS real tem para essa cor). ---- */
+  --accent-50: oklch(0.967 0.001 286.375);
+  --accent-100: oklch(0.92 0.004 286.32);
+  --accent-300: oklch(0.708 0 0);
+  --accent-500: oklch(0.141 0.005 285.823);
+  --accent-600: oklch(0.1 0.004 285.8);
+  --accent-700: oklch(0.06 0.003 285.8);
+  --accent-contrast: oklch(0.97 0.014 254.604);
+
+  /* ---- Semântico: valores reais de badge.tsx ---- */
+  --success-50: #d1fae5;   /* emerald-100 */
+  --success-500: #10b981;  /* emerald-500 */
+  --success-600: #065f46;  /* emerald-800 (é o texto real do badge success) */
+
+  --warning-50: #fef3c7;   /* amber-100 */
+  --warning-500: #f59e0b;  /* amber-500 */
+  --warning-600: #92400e;  /* amber-800 (texto real do badge warning) */
+
+  --danger-50: oklch(0.577 0.245 27.325 / 0.12);
+  --danger-500: oklch(0.577 0.245 27.325);   /* --destructive real */
+  --danger-600: oklch(0.46 0.21 27.325);
+
+  --info-50: #e0f2fe;      /* sky-100 (usado nos stat cards) */
+  --info-500: #0ea5e9;     /* sky-500 */
+  --info-600: #0369a1;     /* sky-700 */
+
+  /* ---- Stat cards: cores reais de overview-cards.tsx (sky/emerald/indigo/amber).
+     Ficam FIXAS (não mudam no escuro) — é assim que o componente real funciona
+     hoje (sem variante dark:), fidelidade > "correção" nossa. ---- */
+  --stat-sky-50: #f0f9ff;    --stat-sky-500: #0ea5e9; --stat-sky-600: #0284c7;
+  --stat-emerald-50: #ecfdf5; --stat-emerald-500: #10b981; --stat-emerald-600: #059669;
+  --stat-indigo-50: #eef2ff; --stat-indigo-500: #6366f1; --stat-indigo-600: #4f46e5;
+  --stat-amber-50: #fffbeb;  --stat-amber-500: #f59e0b; --stat-amber-600: #d97706;
+
+  /* ---- Superfície / texto (tokens reais do shadcn) ---- */
+  --bg-canvas: oklch(0.985 0 0);       /* leve cinza, como o fundo real fora dos cards */
+  --bg-surface: var(--gray-0);          /* --card real */
+  --bg-surface-raised: var(--gray-0);
+  --bg-sidebar: oklch(0.985 0 0);       /* --sidebar real */
+  --bg-topbar: rgba(255, 255, 255, 0.82);
+  --bg-hover: var(--gray-50);           /* --accent real */
+  --bg-active: var(--gray-50);          /* --sidebar-accent real (neutro, não roxo) */
+
+  --border-subtle: var(--gray-100);
+  --border-default: var(--gray-100);    /* --border real é único, sem 2 níveis */
+  --border-strong: var(--gray-200);
+
+  --text-primary: var(--gray-900);      /* --foreground real */
+  --text-secondary: var(--gray-400);    /* --muted-foreground real */
+  --text-tertiary: oklch(0.65 0.01 285.9);
+  --text-on-accent: var(--accent-contrast);
+  --text-link: var(--gray-900);
+
+  /* ---- Tipografia: Montserrat, igual ao projeto real ---- */
+  --font-sans: "Montserrat", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+
+  --text-2xs: 0.6875rem;
+  --text-xs: 0.75rem;
+  --text-sm: 0.8125rem;
+  --text-base: 0.875rem;   /* corpo padrão do app (text-sm do Tailwind) */
+  --text-md: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.125rem;
+
+  --leading-tight: 1.2;
+  --leading-snug: 1.35;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* ---- Espaçamento (escala de 4px) ---- */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* ---- Radius: --radius: 0.65rem real, mesma fórmula do projeto ---- */
+  --radius-base: 0.65rem;
+  --radius-sm: calc(var(--radius-base) - 4px);
+  --radius-md: calc(var(--radius-base) - 2px);
+  --radius-lg: var(--radius-base);
+  --radius-xl: calc(var(--radius-base) + 4px);
+  --radius-full: 999px;
+
+  /* ---- Sombra: valores padrão Tailwind (Card/Input/Button reais usam shadow-xs/shadow-sm) ---- */
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-focus: 0 0 0 3px oklch(0.708 0 0 / 0.5);
+
+  /* ---- Motion ---- */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --duration-slow: 280ms;
+
+  /* ---- Layout: sidebar real = 16rem, variant="floating" (flutuante, com
+     margem/borda/sombra própria, não colada na borda da janela) ---- */
+  --sidebar-width: 16rem;
+  --sidebar-width-collapsed: 3rem;
+  --topbar-height: 64px;
+  --content-max-width: 1360px;
+}
+
+/* ---- Tema escuro: copiado fielmente de .dark em web/src/index.css.
+   O ThemeProvider real (default="system") aplica .dark conforme
+   prefers-color-scheme — replicado aqui via media query (mockup estático). ---- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --gray-0: oklch(0.21 0.006 285.885);      /* --card real no escuro */
+    --gray-25: oklch(0.18 0.005 285.8);
+    --gray-50: oklch(0.274 0.006 286.033);    /* --secondary/--muted/--accent reais */
+    --gray-100: oklch(1 0 0 / 10%);           /* --border real no escuro */
+    --gray-200: oklch(1 0 0 / 15%);           /* --input real */
+    --gray-300: oklch(0.556 0 0);             /* --ring real */
+    --gray-400: oklch(0.705 0.015 286.067);   /* --muted-foreground real */
+    --gray-900: oklch(0.985 0 0);             /* --foreground real (quase branco) */
+
+    --accent-50: oklch(0.274 0.006 286.033);
+    --accent-100: oklch(1 0 0 / 15%);
+    --accent-500: oklch(0.922 0 0);           /* --primary real no escuro (quase branco) */
+    --accent-600: oklch(0.98 0 0);
+    --accent-contrast: oklch(0.205 0 0);      /* --primary-foreground real no escuro */
+
+    --success-50: rgb(16 185 129 / 0.2);
+    --success-600: #a7f3d0;
+    --warning-50: rgb(245 158 11 / 0.2);
+    --warning-600: #fde68a;
+    --danger-50: oklch(0.704 0.191 22.216 / 0.18);
+    --danger-500: oklch(0.704 0.191 22.216);
+    --danger-600: #fda4af;
+    --info-50: rgb(14 165 233 / 0.18);
+    --info-600: #bae6fd;
+
+    --bg-canvas: oklch(0.141 0.005 285.823);
+    --bg-surface: var(--gray-0);
+    --bg-surface-raised: oklch(0.24 0.006 285.9);
+    --bg-sidebar: oklch(0.21 0.006 285.885);
+    --bg-topbar: rgba(20, 20, 24, 0.85);
+    --bg-hover: var(--gray-50);
+    --bg-active: var(--gray-50);
+
+    --border-subtle: var(--gray-100);
+    --border-default: var(--gray-100);
+    --border-strong: var(--gray-200);
+
+    --text-primary: var(--gray-900);
+    --text-secondary: var(--gray-400);
+    --text-tertiary: oklch(0.6 0.01 285.9);
+    --text-link: var(--gray-900);
+
+    --shadow-focus: 0 0 0 3px oklch(0.556 0 0 / 0.5);
+  }
+}

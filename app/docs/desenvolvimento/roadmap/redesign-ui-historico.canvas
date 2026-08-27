@@ -1,0 +1,24 @@
+{
+	"nodes":[
+		{"id":"title","type":"text","text":"# 🎨 Redesign de UI — Histórico\n\nRedesign visual do `app/web` (síndico/portaria/morador) — **concluído**. Detalhe completo em `redesign-ui-historico.md`. Ritmo usado: uma tela por vez, com aprovação explícita antes de avançar.","x":0,"y":-320,"width":900,"height":200},
+		{"id":"fluxo","type":"text","text":"## 🔴 O fluxo (repetir a cada tela)\n1. Mockup em `docs/ui/ui-redesign-v3/pages/*.html` (reaproveitar `shared/` do v2, design já aprovado)\n2. Ler `docs/ui/ui-redesign-v3/BRIEF.md` pro vocabulário de componentes\n3. Aplicar em `app/lab` com dados/endpoints reais (nunca inventar campo)\n4. Validar ao vivo no navegador (claude-in-chrome)\n5. Aprovação explícita do usuário antes de avançar\n6. Portar pro `app/web` via `diff -rq lab/src web/src` + copy 1:1\n7. `tsc -b --force && build && lint` + smoke test no web\n8. Commit + push só quando pedido explicitamente","x":0,"y":-60,"width":900,"height":300,"color":"1"},
+		{"id":"done1","type":"text","text":"## 🟢 Lote 1 — feito (commit d2bd817)\nHome, Financeiro, Moradores, Visitantes, Encomendas, Assembleias — 6 telas portadas e revisadas.","x":0,"y":300,"width":900,"height":180,"color":"4"},
+		{"id":"done2","type":"text","text":"## 🟢 Lote 2 — feito (commit dbadb63)\nChamados, Áreas de Lazer, Agendamentos — stat cards + filtro segmentado dentro do card + tabelas com avatar.\n\nPortaria: intencionalmente não alterada (aprovada como estava).","x":0,"y":530,"width":900,"height":260,"color":"4"},
+		{"id":"licao","type":"text","text":"## ⚠️ Lição — calendário\nCélulas do `Calendar` são quadradas (`aspect-square`): largura cheia = altura enorme. Customizar `DayButton`/`--cell-size` pra resolver foi revertido a pedido do usuário.\n\n**Se precisar limitar altura: usar `overflow-y-auto` no `Card`, não mexer no componente do calendário.**","x":950,"y":530,"width":700,"height":260,"color":"2"},
+		{"id":"proximo-a","type":"text","text":"## 🟢 Grupo A — Comunicação (feito, commit 105eee0)\n\n- Mural: virou mural de verdade (cartões fixados, inclinados, modal de criação)\n- Documentos: padrão genérico (stat cards + filtro)\n- Convites: virou board Kanban por status\n\nPedido explícito do usuário: mais criativo que o padrão genérico onde fizer sentido.","x":0,"y":870,"width":440,"height":320,"color":"4"},
+		{"id":"fora","type":"text","text":"**Fora de escopo por enquanto**: telas `admin/*` (papel de operador da plataforma, domínio diferente — não avaliado se entra neste mesmo fluxo).","x":0,"y":1260,"width":900,"height":140},
+		{"id":"proximo-c","type":"text","text":"## ✅ Grupo C — Eventos/Relatórios ok, Perfil refeito\n\nEstimativa original (por linhas de código) foi enganosa — essas páginas delegam pra componentes maiores:\n\n- Eventos: confirmado bom pelo usuário — sem trabalho\n- Relatórios/BI: confirmado bom pelo usuário — sem trabalho\n- Perfil: tecnicamente maduro mas usuário achou \"engessado\" → redesenhado no Lote 5\n\n**Redesign visual planejado está completo.**","x":1080,"y":870,"width":440,"height":340,"color":"4"},
+		{"id":"lote5","type":"text","text":"## 🟢 Lote 5 — Perfil, revisitado (commit e5912da)\n\nHero (avatar + badge + unidade) com o gradiente de marca real (`from-lime-300 to-teal-600`, não um token `--primary`) + abas Dados/Veículos/Notificações/Encomendas.\n\nDuas opções (coluna vs. abas) viradas em mockups HTML separados pra comparação — usuário escolheu abas. Instalado `Tabs` (shadcn/radix, sem nova dependência).","x":1080,"y":1260,"width":440,"height":300,"color":"4"},
+		{"id":"proximo-b","type":"text","text":"## 🟢 Grupo B — Estrutural (feito, commit 3bb1d38)\n\n- Blocos: padrão genérico (stat cards + modal)\n- Residências: padrão genérico + filtro por ocupação\n- Configurações: pedido \"mais disruptivo\" → virou painel de sliders com marcador de padrão + frase ao vivo\n\nInstalado Slider (shadcn/radix) — novo componente no design system.","x":540,"y":870,"width":440,"height":320,"color":"4"}
+	],
+	"edges":[
+		{"id":"e1","fromNode":"fluxo","fromSide":"bottom","toNode":"done1","toSide":"top"},
+		{"id":"e2","fromNode":"done1","fromSide":"bottom","toNode":"done2","toSide":"top"},
+		{"id":"e3","fromNode":"done2","fromSide":"right","toNode":"licao","toSide":"left"},
+		{"id":"e4","fromNode":"done2","fromSide":"bottom","toNode":"proximo-a","toSide":"top"},
+		{"id":"e5","fromNode":"proximo-a","fromSide":"right","toNode":"proximo-b","toSide":"left"},
+		{"id":"e6","fromNode":"proximo-b","fromSide":"right","toNode":"proximo-c","toSide":"left"},
+		{"id":"e8","fromNode":"proximo-c","fromSide":"bottom","toNode":"lote5","toSide":"top"},
+		{"id":"e7","fromNode":"proximo-b","fromSide":"bottom","toNode":"fora","toSide":"top"}
+	]
+}

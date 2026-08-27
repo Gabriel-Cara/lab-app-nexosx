@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Redesign de UI v2 · NexosX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared/tokens.css" />
+  <link rel="stylesheet" href="shared/base.css" />
+  <link rel="stylesheet" href="shared/components.css" />
+  <style>
+    body { background: var(--bg-canvas); }
+    .gallery-shell {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: var(--space-16) var(--space-6) var(--space-16);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-10);
+    }
+    .gallery-hero { display: flex; flex-direction: column; gap: var(--space-3); text-align: center; align-items: center; }
+    .gallery-hero .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: var(--text-xs); font-weight: var(--weight-semibold);
+      color: var(--text-primary); background: var(--gray-50);
+      padding: 4px 12px; border-radius: var(--radius-full);
+    }
+    .gallery-hero h1 { font-size: var(--text-3xl); font-weight: var(--weight-bold); letter-spacing: -0.01em; }
+    .gallery-hero p { max-width: 640px; color: var(--text-secondary); font-size: var(--text-base); line-height: var(--leading-relaxed); }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-5);
+    }
+    @media (max-width: 900px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .gallery-grid { grid-template-columns: 1fr; } }
+
+    .gallery-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      transition: box-shadow var(--duration-base) var(--ease-standard), transform var(--duration-base) var(--ease-standard);
+    }
+    .gallery-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+
+    .gallery-card .thumb {
+      height: 132px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--tone-a, var(--gray-50)), var(--bg-surface));
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .gallery-card .thumb svg.icon { width: 40px; height: 40px; color: var(--tone-icon, var(--text-primary)); }
+
+    .gallery-card .body { padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-2); flex: 1; }
+    .gallery-card .body h3 { font-size: var(--text-md); font-weight: var(--weight-semibold); }
+    .gallery-card .body p { font-size: var(--text-sm); color: var(--text-secondary); line-height: var(--leading-normal); flex: 1; }
+    .gallery-card .open-row { display: flex; align-items: center; gap: 6px; font-size: var(--text-sm); font-weight: var(--weight-medium); color: var(--text-primary); margin-top: var(--space-2); }
+    .gallery-card .open-row svg.icon { width: 15px; height: 15px; transition: transform var(--duration-fast) var(--ease-standard); }
+    .gallery-card:hover .open-row svg.icon { transform: translateX(3px); }
+
+    .gallery-note {
+      display: flex;
+      gap: var(--space-3);
+      align-items: flex-start;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-sm);
+      padding: var(--space-5);
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      line-height: var(--leading-relaxed);
+    }
+    .gallery-note svg.icon { width: 18px; height: 18px; color: var(--text-primary); flex-shrink: 0; margin-top: 2px; }
+    .gallery-note strong { color: var(--text-primary); }
+    .gallery-note code {
+      background: var(--gray-50); border-radius: 4px; padding: 1px 6px; font-size: var(--text-xs);
+    }
+  </style>
+</head>
+<body>
+  <!-- inline icon sprite -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <symbol id="home" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 10v9a1 1 0 0 0 1 1H9a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h2.5a1 1 0 0 0 1-1v-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="dollar-sign" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 6.5c0-1.9-2.2-3-5-3s-5 1.2-5 3 2 2.7 5 3.3 5 1.6 5 3.4-2.2 3-5 3-5-1-5-2.8"/></symbol>
+    <symbol id="vote" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12.5 11 14.5 15.5 9.5"/><rect x="3.5" y="4" width="17" height="16" rx="2"/></symbol>
+    <symbol id="user-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20.5c0-3.6 2.9-6.5 6.5-6.5s6.5 2.9 6.5 6.5"/><path d="m15.5 12.5 1.8 1.8 3.2-3.4"/></symbol>
+    <symbol id="package" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 7 8.5-4.5L20.5 7 12 11.5 3.5 7Z"/><path d="M3.5 7v10l8.5 4.5 8.5-4.5V7"/><path d="M12 11.5V21"/></symbol>
+    <symbol id="users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16.5 5.5a3 3 0 0 1 0 5.9"/><path d="M20.5 20c0-2.8-1.9-5.1-4.5-5.8"/></symbol>
+    <symbol id="chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></symbol>
+    <symbol id="sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M18 6l-2.5 2.5M8.5 15.5 6 18"/></symbol>
+    <symbol id="info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 8v.01"/></symbol>
+  </svg>
+
+  <main class="gallery-shell">
+    <section class="gallery-hero">
+      <span class="eyebrow"><svg class="icon"><use href="#sparkle"></use></svg>v2 — fiel ao design system real</span>
+      <h1>NexosX — Redesign v2 (dentro do DS do projeto)</h1>
+      <p>
+        Mesma composição/layout aprovados na v1, agora com as cores, tipografia (Montserrat) e
+        componentes REAIS do produto (shadcn "new-york", tokens do <code>web/src/index.css</code>,
+        badges e cards reais) — em vez das cores propostas do primeiro rascunho. Dados fictícios do
+        <strong>Condomínio Demo</strong>. Clique em qualquer card para abrir o mockup completo.
+      </p>
+    </section>
+
+    <div class="gallery-grid">
+      <a class="gallery-card" href="pages/dashboard.html" style="--tone-a: var(--gray-50); --tone-icon: var(--text-primary);">
+        <div class="thumb"><svg class="icon"><use href="#home"></use></svg></div>
+        <div class="body">
+          <h3>Home</h3>
+          <p>Boas-vindas, ações rápidas, visão geral e resumo de encomendas, visitantes, moradores e reservas.</p>
+          <span class="open-row">Abrir mockup <svg class="icon"><use href="#chevron-right"></use></svg></span>
+        </div>
+      </a>
+
+      <a class="gallery-card" href="pages/financeiro.html" style="--tone-a: var(--success-50); --tone-icon: var(--success-600);">
+        <div class="thumb"><svg class="icon"><use href="#dollar-sign"></use></svg></div>
+        <div class="body">
+          <h3>Financeiro</h3>
+          <p>Cobranças condominiais, taxa de arrecadação, inadimplência e geração de boletos/PIX.</p>
+          <span class="open-row">Abrir mockup <svg class="icon"><use href="#chevron-right"></use></svg></span>
+        </div>
+      </a>
+
+      <a class="gallery-card" href="pages/assembleias.html" style="--tone-a: var(--info-50); --tone-icon: var(--info-600);">
+        <div class="thumb"><svg class="icon"><use href="#vote"></use></svg></div>
+        <div class="body">
+          <h3>Assembleias</h3>
+          <p>Lista de assembleias + quórum e votação digital em tempo real, pauta por pauta.</p>
+          <span class="open-row">Abrir mockup <svg class="icon"><use href="#chevron-right"></use></svg></span>
+        </div>
+      </a>
+
+      <a class="gallery-card" href="pages/visitantes.html" style="--tone-a: var(--warning-50); --tone-icon: var(--warning-600);">
+        <div class="thumb"><svg class="icon"><use href="#user-check"></use></svg></div>
+        <div class="body">
+          <h3>Visitantes</h3>
+          <p>Autorização, entrada/saída, pré-cadastro com QR, frequentes e bloqueados na portaria.</p>
+          <span class="open-row">Abrir mockup <svg class="icon"><use href="#chevron-right"></use></svg></span>
+        </div>
+      </a>
+
+      <a class="gallery-card" href="pages/encomendas.html" style="--tone-a: var(--info-50); --tone-icon: var(--info-600);">
+        <div class="thumb"><svg class="icon"><use href="#package"></use></svg></div>
+        <div class="body">
+          <h3>Encomendas</h3>
+          <p>Registro, retirada por código e status de encomendas pendentes, atrasadas e retiradas.</p>
+          <span class="open-row">Abrir mockup <svg class="icon"><use href="#chevron-right"></use></svg></span>
+        </div>
+      </a>
+
+      <a class="gallery-card" href="pages/moradores.html" style="--tone-a: var(--success-50); --tone-icon: var(--success-600);">
+        <div class="thumb"><svg class="icon"><use href="#users"></use></svg></div>
+        <div class="body">
+          <h3>Moradores</h3>
+          <p>Grid de cards por morador: unidade, contato, veículos e status ativo/desativado.</p>
+          <span class="open-row">Abrir mockup <svg class="icon"><use href="#chevron-right"></use></svg></span>
+        </div>
+      </a>
+    </div>
+
+    <div class="gallery-note">
+      <svg class="icon"><use href="#info"></use></svg>
+      <div>
+        <strong>O que mudou da v1 para cá:</strong> cor primária deixou de ser roxo/indigo e virou o
+        neutro real do projeto (quase preto no claro, quase branco no escuro), fonte trocou de Inter
+        para <strong>Montserrat</strong>, badges de status agora seguem exatamente o componente real
+        (destructive é vermelho sólido, sucesso/aviso são tons claros), a sidebar ganhou o visual
+        "flutuante" do componente real, e os cards de indicador replicam o
+        <code>overview-cards.tsx</code> real (blob de gradiente + chip colorido). Em Encomendas, o card
+        "Tipos de encomenda" foi removido e o ícone de Alimento agora é um sanduíche. A composição das
+        telas em si não mudou — só a pele. A v1 continua intacta em <code>../ui-redesign/</code> para
+        comparação lado a lado.
+      </div>
+    </div>
+  </main>
+</body>
+</html>

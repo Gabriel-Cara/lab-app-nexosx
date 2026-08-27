@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Perfil · Opção B (header + abas) · NexosX</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../shared/tokens.css" />
+  <link rel="stylesheet" href="../shared/base.css" />
+  <link rel="stylesheet" href="../shared/components.css" />
+  <style>
+    /* Page-specific: full-width header banner + tab navigation */
+    .profile-hero {
+      display: flex;
+      align-items: center;
+      gap: var(--space-5);
+      padding: var(--space-6) var(--space-6);
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, var(--stat-indigo-600), var(--stat-indigo-500) 60%, #818cf8);
+      color: #fff;
+      margin-bottom: var(--space-6);
+      flex-wrap: wrap;
+    }
+    .avatar-xl {
+      width: 88px;
+      height: 88px;
+      border-radius: var(--radius-full);
+      background: rgba(255, 255, 255, 0.18);
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: var(--weight-semibold);
+      font-size: var(--text-2xl);
+      flex-shrink: 0;
+    }
+    .profile-hero .hero-info { display: flex; flex-direction: column; gap: 6px; }
+    .profile-hero .hero-name { font-size: var(--text-2xl); font-weight: var(--weight-bold); }
+    .profile-hero .hero-meta { display: flex; align-items: center; gap: var(--space-3); flex-wrap: wrap; font-size: var(--text-sm); color: rgba(255,255,255,0.9); }
+    .profile-hero .hero-meta .row { display: flex; align-items: center; gap: 6px; }
+    .profile-hero .hero-meta svg.icon { width: 14px; height: 14px; }
+    .profile-hero .badge-hero {
+      display: inline-flex; align-items: center; padding: 3px 10px;
+      border-radius: var(--radius-full); background: rgba(255,255,255,0.2);
+      font-size: var(--text-xs); font-weight: var(--weight-medium); width: fit-content;
+    }
+    .profile-hero .hero-actions { margin-left: auto; display: flex; gap: var(--space-2); }
+    .profile-hero .btn-hero {
+      background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.4);
+    }
+    .profile-hero .btn-hero:hover { background: rgba(255,255,255,0.25); }
+
+    .profile-tabs {
+      display: flex;
+      gap: var(--space-1);
+      border-bottom: 1px solid var(--border-default);
+      margin-bottom: var(--space-6);
+      overflow-x: auto;
+    }
+    .profile-tab {
+      display: flex; align-items: center; gap: 6px;
+      padding: var(--space-3) var(--space-4);
+      font-size: var(--text-sm); font-weight: var(--weight-medium);
+      color: var(--text-secondary);
+      border-bottom: 2px solid transparent;
+      background: none; border-top: none; border-left: none; border-right: none;
+      cursor: pointer; white-space: nowrap;
+    }
+    .profile-tab svg.icon { width: 16px; height: 16px; }
+    .profile-tab:hover { color: var(--text-primary); }
+    .profile-tab.active { color: var(--stat-indigo-500); border-bottom-color: var(--stat-indigo-500); }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .vehicle-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr) auto;
+      gap: var(--space-3);
+      align-items: end;
+      padding: var(--space-4);
+      border: 1px dashed var(--border-default);
+      border-radius: var(--radius-md);
+    }
+    @media (max-width: 760px) { .vehicle-row { grid-template-columns: 1fr 1fr; } }
+
+    .proxy-row { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); padding: var(--space-3) 0; border-bottom: 1px dashed var(--border-subtle); }
+    .proxy-row:last-child { border-bottom: none; padding-bottom: 0; }
+  </style>
+</head>
+<body>
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <symbol id="home" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 10v9a1 1 0 0 0 1 1H9a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1h2.5a1 1 0 0 0 1-1v-9" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="megaphone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11v3a1 1 0 0 0 1 1h1l1.5 5h2L8 15"/><path d="M4 11 17 5v13L4 12"/><path d="M17 8.5c1.7.4 3 2 3 3.7s-1.3 3.3-3 3.7"/></symbol>
+    <symbol id="file-text" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h7l4 4v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path d="M14 3v4h4"/><path d="M9 13h6M9 17h6M9 9h2"/></symbol>
+    <symbol id="wrench" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.6 4.9L4 16.3V20h3.7l5.1-5.1a4 4 0 0 0 4.9-5.6l-2.6 2.6-2-2 2.6-2.6Z"/></symbol>
+    <symbol id="dollar-sign" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M17 6.5c0-1.9-2.2-3-5-3s-5 1.2-5 3 2 2.7 5 3.3 5 1.6 5 3.4-2.2 3-5 3-5-1-5-2.8"/></symbol>
+    <symbol id="vote" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12.5 11 14.5 15.5 9.5"/><rect x="3.5" y="4" width="17" height="16" rx="2"/></symbol>
+    <symbol id="building" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="10" height="18" rx="1"/><path d="M14 8h6v13h-6"/><path d="M7.5 7h1M11 7h1M7.5 11h1M11 11h1M7.5 15h1M11 15h1M17 12h1M17 16h1"/></symbol>
+    <symbol id="users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16.5 5.5a3 3 0 0 1 0 5.9"/><path d="M20.5 20c0-2.8-1.9-5.1-4.5-5.8"/></symbol>
+    <symbol id="user-cog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9.5" cy="7.5" r="3.5"/><path d="M3 20.5c0-3.6 2.9-6.5 6.5-6.5S16 16.9 16 20.5"/><circle cx="18.5" cy="15.5" r="2.3"/><path d="M18.5 11.8v1M18.5 18.2v1M15 15.5h1M21 15.5h1M16.2 12.7l.7.7M19.6 17.6l.7.7M20.8 12.7l-.7.7M17.3 17.6l-.7.7"/></symbol>
+    <symbol id="user-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20.5c0-3.6 2.9-6.5 6.5-6.5s6.5 2.9 6.5 6.5"/><path d="m15.5 12.5 1.8 1.8 3.2-3.4"/></symbol>
+    <symbol id="package" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 7 8.5-4.5L20.5 7 12 11.5 3.5 7Z"/><path d="M3.5 7v10l8.5 4.5 8.5-4.5V7"/><path d="M12 11.5V21"/></symbol>
+    <symbol id="map-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.4 7-11.5a7 7 0 0 0-14 0C5 14.6 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.3"/></symbol>
+    <symbol id="calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M8 3v4M16 3v4M3.5 10h17"/></symbol>
+    <symbol id="party" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5 14.5 5a2 2 0 0 1 2.8 2.8L7 18.3"/><path d="M3 21l1.6-4.5L8 20 3 21Z"/><path d="M13 3.5l1 1M18 5.5l1 1M16 2l.6 1.4M20 8l1.4.6"/></symbol>
+    <symbol id="mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6 8.5 7 8.5-7"/></symbol>
+    <symbol id="settings" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3.5v2M12 18.5v2M4.9 6.4l1.4 1.4M17.7 16.2l1.4 1.4M3.5 12h2M18.5 12h2M4.9 17.6l1.4-1.4M17.7 7.8l1.4-1.4"/></symbol>
+    <symbol id="bar-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V10M12 20V4M19 20v-7"/><path d="M3 20h18"/></symbol>
+    <symbol id="search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m20 20-4.5-4.5"/></symbol>
+    <symbol id="bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10a6 6 0 1 1 12 0c0 4 1.5 5.5 1.5 5.5H4.5S6 14 6 10Z"/><path d="M10 19a2 2 0 0 0 4 0"/></symbol>
+    <symbol id="chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+    <symbol id="plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="edit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L18.5 9.5a2.1 2.1 0 0 0-3-3L5 17v3Z"/><path d="M13.5 8 16 10.5"/></symbol>
+    <symbol id="trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14M9 7V4.5h6V7M6.5 7l1 12.5a1 1 0 0 0 1 .9h7a1 1 0 0 0 1-.9L17.5 7"/><path d="M10 11v6M14 11v6"/></symbol>
+    <symbol id="car" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16V12l2-5h12l2 5v4"/><path d="M4 16h16v2.5a1 1 0 0 1-1 1h-1.5a1 1 0 0 1-1-1V17h-9v1.5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V16Z"/><circle cx="8" cy="16" r="1.4"/><circle cx="16" cy="16" r="1.4"/></symbol>
+    <symbol id="phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h2.8L10.5 8 8.2 9.5a11 11 0 0 0 5.8 5.8l1.5-2.3 4.5 1.2v2.8a2 2 0 0 1-2.1 2A17.5 17.5 0 0 1 4.5 5.6a2 2 0 0 1 2-2.1Z"/></symbol>
+    <symbol id="shield-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 19 6v6c0 5-3 7.7-7 8.5-4-.8-7-3.5-7-8.5V6l7-2.5Z"/><path d="m9 12 2 2 4-4.3"/></symbol>
+    <symbol id="x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+  </svg>
+
+  <div class="app-shell">
+    <div class="sidebar-scrim" data-menu-toggle></div>
+
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="sidebar-brand-mark">N</div>
+        <div class="sidebar-brand-text">
+          <div class="name">nexos</div>
+          <div class="tagline">Sistema de controle</div>
+        </div>
+      </div>
+
+      <nav class="sidebar-scroll">
+        <div class="sidebar-group">
+          <div class="sidebar-group-label">Navegação</div>
+          <ul class="stack" style="--gap: 2px">
+            <li><a href="dashboard.html" class="nav-item"><svg class="icon"><use href="#home"></use></svg>Home</a></li>
+            <li><a href="mural.html" class="nav-item"><svg class="icon"><use href="#megaphone"></use></svg>Mural</a></li>
+            <li><a href="#" class="nav-item"><svg class="icon"><use href="#file-text"></use></svg>Documentos</a></li>
+            <li><a href="chamados.html" class="nav-item"><svg class="icon"><use href="#wrench"></use></svg>Chamados</a></li>
+            <li><a href="financeiro.html" class="nav-item"><svg class="icon"><use href="#dollar-sign"></use></svg>Financeiro</a></li>
+            <li><a href="assembleias.html" class="nav-item"><svg class="icon"><use href="#vote"></use></svg>Assembleias</a></li>
+            <li><a href="#" class="nav-item"><svg class="icon"><use href="#building"></use></svg>Blocos</a></li>
+            <li><a href="#" class="nav-item"><svg class="icon"><use href="#home"></use></svg>Residências</a></li>
+            <li><a href="moradores.html" class="nav-item"><svg class="icon"><use href="#users"></use></svg>Moradores</a></li>
+            <li><a href="portaria.html" class="nav-item"><svg class="icon"><use href="#user-cog"></use></svg>Portaria</a></li>
+            <li><a href="visitantes.html" class="nav-item"><svg class="icon"><use href="#user-check"></use></svg>Visitantes</a></li>
+            <li><a href="encomendas.html" class="nav-item"><svg class="icon"><use href="#package"></use></svg>Encomendas</a></li>
+            <li><a href="areas-lazer.html" class="nav-item"><svg class="icon"><use href="#map-pin"></use></svg>Áreas de Lazer</a></li>
+            <li><a href="agendamentos.html" class="nav-item"><svg class="icon"><use href="#calendar"></use></svg>Agendamentos</a></li>
+            <li><a href="#" class="nav-item"><svg class="icon"><use href="#party"></use></svg>Eventos</a></li>
+            <li><a href="#" class="nav-item"><svg class="icon"><use href="#mail"></use></svg>Convites</a></li>
+            <li><a href="#" class="nav-item"><svg class="icon"><use href="#settings"></use></svg>Configurações</a></li>
+            <li><a href="#" class="nav-item"><svg class="icon"><use href="#bar-chart"></use></svg>Relatórios</a></li>
+          </ul>
+        </div>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-chip">
+          <div class="avatar">JS</div>
+          <div class="who">
+            <div class="name">João Silva</div>
+            <div class="role">Morador · Apto 101</div>
+          </div>
+          <svg class="icon chevron"><use href="#chevron-down"></use></svg>
+        </div>
+      </div>
+    </aside>
+
+    <div class="content-col">
+      <header class="topbar">
+        <button class="menu-toggle" data-menu-toggle aria-label="Abrir menu">
+          <svg class="icon"><use href="#menu"></use></svg>
+        </button>
+        <div class="topbar-search">
+          <svg class="icon"><use href="#search"></use></svg>
+          <span>Buscar moradores, encomendas, chamados…</span>
+          <kbd>⌘K</kbd>
+        </div>
+        <div class="topbar-actions">
+          <button class="icon-btn" aria-label="Notificações">
+            <svg class="icon"><use href="#bell"></use></svg>
+            <span class="dot"></span>
+          </button>
+          <div class="topbar-condo">
+            <span class="label">Condomínio</span>
+            <span class="value">Condomínio Demo</span>
+          </div>
+        </div>
+      </header>
+
+      <main class="content-main">
+        <p class="text-secondary text-sm" style="margin-bottom: var(--space-4);">Opção B — header em destaque + navegação por abas</p>
+
+        <div class="profile-hero">
+          <div class="avatar-xl">JS</div>
+          <div class="hero-info">
+            <span class="badge-hero">Morador</span>
+            <span class="hero-name">João Silva</span>
+            <div class="hero-meta">
+              <span class="row"><svg class="icon"><use href="#building"></use></svg>Bloco A · Apto 101</span>
+              <span class="row"><svg class="icon"><use href="#mail"></use></svg>joao.silva@nexosx.com.br</span>
+              <span class="row"><svg class="icon"><use href="#phone"></use></svg>(11) 98888-7777</span>
+            </div>
+          </div>
+          <div class="hero-actions">
+            <button class="btn btn-hero">
+              <svg class="icon"><use href="#edit"></use></svg>
+              Editar perfil
+            </button>
+          </div>
+        </div>
+
+        <nav class="profile-tabs" data-tabs>
+          <button class="profile-tab active" data-tab-trigger="dados">
+            <svg class="icon"><use href="#user-cog"></use></svg>
+            Dados
+          </button>
+          <button class="profile-tab" data-tab-trigger="veiculos">
+            <svg class="icon"><use href="#car"></use></svg>
+            Veículos
+          </button>
+          <button class="profile-tab" data-tab-trigger="notificacoes">
+            <svg class="icon"><use href="#bell"></use></svg>
+            Notificações
+          </button>
+          <button class="profile-tab" data-tab-trigger="encomendas">
+            <svg class="icon"><use href="#package"></use></svg>
+            Encomendas
+          </button>
+        </nav>
+
+        <div class="tab-panel active" data-tab-panel="dados">
+          <div class="card card-pad" style="margin-bottom: var(--space-5);">
+            <div class="card-header">
+              <div>
+                <h3 class="text-h3">Dados pessoais</h3>
+                <p class="text-tertiary text-xs">Nome e e-mail são definidos pela conta.</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="grid" style="grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+                <div class="field">
+                  <span class="field-label">Nome completo</span>
+                  <input class="input" type="text" value="João Silva" disabled />
+                </div>
+                <div class="field">
+                  <span class="field-label">E-mail</span>
+                  <input class="input" type="email" value="joao.silva@nexosx.com.br" disabled />
+                </div>
+                <div class="field">
+                  <span class="field-label">Telefone</span>
+                  <input class="input" type="text" value="(11) 98888-7777" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-pad" style="margin-bottom: var(--space-5);">
+            <div class="card-header">
+              <div>
+                <h3 class="text-h3">Endereço</h3>
+                <p class="text-tertiary text-xs">Apartamento e bloco são definidos pela administração.</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="grid" style="grid-template-columns: 1fr 1fr; gap: var(--space-4);">
+                <div class="field">
+                  <span class="field-label">Apartamento</span>
+                  <input class="input" type="text" value="101" disabled />
+                </div>
+                <div class="field">
+                  <span class="field-label">Bloco/Prédio</span>
+                  <input class="input" type="text" value="Bloco A" disabled />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card card-pad">
+            <div class="card-header">
+              <div>
+                <h3 class="text-h3">Contato de emergência</h3>
+                <p class="text-tertiary text-xs">Alguém que poderemos contatar em caso de necessidade.</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="field">
+                <span class="field-label">Nome e telefone</span>
+                <textarea class="textarea" rows="2">Maria Silva - (11) 99999-8888</textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-panel" data-tab-panel="veiculos">
+          <div class="card card-pad">
+            <div class="card-header">
+              <div>
+                <h3 class="text-h3">Veículos</h3>
+                <p class="text-tertiary text-xs">Cadastre os veículos que circulam com esta residência.</p>
+              </div>
+              <button class="btn btn-secondary btn-sm">
+                <svg class="icon"><use href="#plus"></use></svg>
+                Adicionar carro
+              </button>
+            </div>
+            <div class="card-body">
+              <div class="vehicle-row">
+                <div class="field">
+                  <span class="field-label">Modelo</span>
+                  <input class="input" type="text" value="Civic" />
+                </div>
+                <div class="field">
+                  <span class="field-label">Placa</span>
+                  <input class="input" type="text" value="ABC1D23" />
+                </div>
+                <div class="field">
+                  <span class="field-label">Vaga</span>
+                  <input class="input" type="text" value="G2-14" />
+                </div>
+                <div class="field">
+                  <span class="field-label">Ano</span>
+                  <input class="input" type="text" value="2020" />
+                </div>
+                <button class="btn btn-ghost btn-icon" aria-label="Remover carro" style="align-self:end;">
+                  <svg class="icon"><use href="#trash"></use></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-panel" data-tab-panel="notificacoes">
+          <div class="card card-pad">
+            <div class="card-header">
+              <div>
+                <h3 class="text-h3">Notificações push</h3>
+                <p class="text-tertiary text-xs">Receba avisos diretamente neste dispositivo, além do sino e do e-mail/SMS.</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <button class="btn btn-secondary">
+                <svg class="icon"><use href="#bell"></use></svg>
+                Ativar neste dispositivo
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-panel" data-tab-panel="encomendas">
+          <div class="card card-pad">
+            <div class="card-header">
+              <div>
+                <h3 class="text-h3">Pessoas autorizadas a retirar encomendas</h3>
+                <p class="text-tertiary text-xs">Procuradores que podem retirar suas encomendas na portaria em seu lugar.</p>
+              </div>
+            </div>
+            <div class="card-body">
+              <div class="cluster" style="align-items:end; margin-bottom: var(--space-4);">
+                <div class="field" style="flex:1;">
+                  <span class="field-label">Nome</span>
+                  <input class="input" type="text" placeholder="Nome completo" />
+                </div>
+                <div class="field" style="flex:1;">
+                  <span class="field-label">Documento (opcional)</span>
+                  <input class="input" type="text" placeholder="RG ou CPF" />
+                </div>
+                <button class="btn btn-primary">
+                  <svg class="icon"><use href="#plus"></use></svg>
+                  Adicionar
+                </button>
+              </div>
+              <div class="proxy-row">
+                <div class="lines">
+                  <span class="primary">Ana Souza</span>
+                  <span class="secondary text-tertiary text-xs">RG 12.345.678-9</span>
+                </div>
+                <button class="btn btn-ghost btn-icon" aria-label="Remover procurador">
+                  <svg class="icon"><use href="#trash"></use></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="../shared/app.js"></script>
+  <script>
+    document.querySelectorAll('[data-tab-trigger]').forEach((trigger) => {
+      trigger.addEventListener('click', () => {
+        const target = trigger.getAttribute('data-tab-trigger');
+        document.querySelectorAll('[data-tab-trigger]').forEach((t) => t.classList.remove('active'));
+        document.querySelectorAll('[data-tab-panel]').forEach((p) => p.classList.remove('active'));
+        trigger.classList.add('active');
+        document.querySelector(`[data-tab-panel="${target}"]`).classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

@@ -155,7 +155,7 @@ Corrigido de quebra (achado em produção, não é bug da Fase 10): o webhook do
 
 ## Fase 12 — Correções da triagem de prontidão para produção 🔴
 
-**Por que agora:** triagem completa (segurança + carga/concorrência real + E2E) feita em 2026-08-20 (`docs/desenvolvimento/tecnico/TRIAGEM_PRODUCAO_2026-08-20.md`) concluiu que o produto sustenta prospecção de venda, mas achou 2 bloqueantes na ferramenta que o operador da plataforma usa pra rodar o negócio — corrigir antes do primeiro cliente pagante.
+**Por que agora:** triagem completa (segurança + carga/concorrência real + E2E) feita em 2026-08-20 (`docs/desenvolvimento/tecnico/triagem-producao-2026-08-20.md`) concluiu que o produto sustenta prospecção de venda, mas achou 2 bloqueantes na ferramenta que o operador da plataforma usa pra rodar o negócio — corrigir antes do primeiro cliente pagante.
 
 - [x] Paginação/busca em Admin > Usuários (2026-08-20) — `GET /admin/users` ganhou page/limit/search/role/condominiumId; tela ganhou busca + 2 filtros + paginação. Corrigido no caminho: `exposedHeaders` ausente no CORS (`api/src/app.ts`) escondia `total-count` de **toda** listagem paginada do frontend, não só admin.
 - [x] Importação de moradores via upload de planilha `.xlsx`/`.csv` (2026-08-20) — troca de textarea por upload real (parse client-side, modelo pra baixar, preview antes de confirmar). Backend: pré-fetch de e-mails existentes + processamento em lote paralelo (concorrência limitada a 10) em vez de sequencial — 200 linhas de 95,8s para ~15,6s, validado sob concorrência real (duplicata intra-arquivo detectada corretamente).
@@ -190,6 +190,7 @@ _(itens abaixo não contam no total "Itens" da fase — são backlog identificad
 - [ ] **C1** — gap independente: uma pessoa ainda não pode acumular múltiplos papéis no mesmo condomínio (ex: síndico que também mora no prédio que administra) — `Role` continua um escalar único por linha de `User`.
 - [ ] **Contato do síndico local** (adiado dentro da opção (a)) — precisaria de um campo de contato novo em `Condominium`, que não existe.
 - [ ] **Última atividade / condomínio "esquecido"** (adiado dentro da opção (a)) — sem fonte de dado confiável ainda: `AuditLog` cobre só 6 de 48 controllers, daria sinal enganoso se usado hoje.
+- [ ] **Conformidade LGPD** — nunca avaliada tecnicamente (fora do escopo de qualquer triagem já feita). O sistema guarda CPF, telefone e endereço de moradores reais; checar com alguém que entenda de compliance de dados pessoais no Brasil (base legal de tratamento, retenção, direito de exclusão) antes de formalizar contrato com o primeiro cliente pagante. Ver `docs/desenvolvimento/tecnico/triagem-producao-2026-08-20.md`, seção "Fora do escopo desta triagem técnica".
 
 ---
 

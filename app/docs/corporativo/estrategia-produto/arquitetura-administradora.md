@@ -5,6 +5,8 @@ Escopo: reformular o que a administradora (persona multi-condomínio) vê como t
 Método: cruzamento da fala do founder — "a parte da administradora é mais 'gerir' os síndicos de cada condomínio, mantendo a função de 'olhar por dentro' caso queira, mas sinto que deve ser uma visão mais de 'gestão'" — com o modelo de dados já implementado (`Organization`, `organizationId`) e as telas já entregues (`portfolio.tsx`, `condominium-switcher.tsx`).
 Companion visual: `arquitetura-administradora.canvas`
 
+> **Status: opção (a) foi escolhida pelo founder e implementada** — "Painel de Gestão" é hoje a tela inicial da administradora (ver `checklist-implementacao.md`, Fase 13, item "Opção (a) escolhida e implementada"). A opção (b) (síndico como pessoa distinta, hierarquicamente gerida) permanece como possibilidade futura em aberto, não descartada — ver seção "1. Arquitetura de telas proposta" abaixo para o raciocínio completo, ainda válido como referência.
+
 ---
 
 ## Contexto: o que foi entregue vs. o que o founder quer agora
