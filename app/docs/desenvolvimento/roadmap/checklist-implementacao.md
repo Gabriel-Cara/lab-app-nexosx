@@ -12,7 +12,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 
 ## Progresso geral
 
-**50 / 51 itens concluídos (98%)**
+**51 / 52 itens concluídos (98%)**
 
 | Fase | Foco | Itens | Status |
 |---|---|---|---|
@@ -29,7 +29,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 | 10 | Módulos de alto valor/complexidade | 2 | ✅ Concluído (2026-08-18) |
 | 11 | Fronteira tecnológica | 1 | 🔲 Não iniciado |
 | 12 | Correções da triagem de produção | 2 | ✅ Concluído (2026-08-20) |
-| 13 | Administradoras multi-condomínio | 9 | ✅ Concluído (2026-08-19 a 2026-08-27) |
+| 13 | Administradoras multi-condomínio | 10 | ✅ Concluído (2026-08-19 a 2026-08-27) |
 
 Atualize a tabela acima e o contador de progresso conforme os itens forem fechados.
 
@@ -181,15 +181,15 @@ Corrigido de quebra (achado em produção, não é bug da Fase 10): o webhook do
 - [x] A2 + A3 — qualificação de lead e sinal de administrador recorrente — `CondominiumRequest` ganhou 3 campos opcionais (`companyName`, `portfolioSize`, `leadSource`) e um campo `internalNotes` (admin-only, editável por diálogo na tela de Solicitações); a listagem do admin passou a calcular e exibir `relatedRequestsCount` (quantas outras solicitações compartilham o mesmo `adminEmail`) como badge — sinal de administrador multi-condomínio sem mudança de schema pra isso. Novo `PATCH /condominium-requests/:id/notes`.
 - [x] A4 — funil comercial (Kanban leve) (2026-08-27) — campo `salesStage` em `CondominiumRequest` (enum novo/contatado/negociacao/proposta_enviada; Ganho/Perdido derivados do `status` já existente, não armazenados à parte) e board Kanban (sem drag-and-drop, `Select` por card pra mudar de estágio) como nova aba padrão da tela de Solicitações do admin, com a tabela atual movida pra aba "Lista". Responde diretamente à pergunta original do founder sobre visibilidade comercial. De quebra, corrigido um bug de layout no wrapper compartilhado `components/layout/app.tsx` (faltava `min-w-0` nas divs flex, então conteúdo largo — como este Kanban de 6 colunas — expandia a página inteira em vez de rolar internamente, escondendo o `CardAction`/`TabsList` fora da viewport).
 - [x] A5 — status de plano/assinatura (2026-08-27) — novo campo `Condominium.planStatus` (enum trial/ativo/em_risco/cancelado, default trial) com `PATCH /condominiums/:id/plan-status` dedicado; `pages/admin/condominiums.tsx` ganhou coluna "Status" com badge colorido + `Select` inline pra trocar o status sem sair da lista. Dá ao founder visibilidade da saúde comercial de cada condomínio-cliente direto na tela que já existia.
+- [x] A6 / B7 — busca, agrupamento por administradora e página de detalhe (2026-08-27) — `list()` passou a incluir a `organization` de cada condomínio; nova `GET /condominiums/:id` retorna os mesmos sinais operacionais já usados no `portfolioSummary()` (moradores, encomendas pendentes, cobranças em atraso, chamados abertos), escopados a um único condomínio. `pages/admin/condominiums.tsx` ganhou busca por nome/código e agrupamento por administradora via `Accordion` ("Sem administradora" pros independentes); nome do condomínio virou link pra nova `pages/admin/condominium-detail.tsx` (rota `admin/condominiums/:id`), com os dados da administradora, o `Select` de status de plano (extraído pro componente reutilizável `condominium-plan-status-select.tsx`) e os 4 cards de saúde. `AuditLog` (6 de 48 controllers com cobertura) segue não confiável como sinal de "última atividade" — os cards operacionais fazem esse papel em vez disso.
 
 ### Próximos passos (não iniciado)
 
 _(itens abaixo não contam no total "Itens" da fase — são backlog identificado pelo doc de gaps, ainda sem trabalho iniciado.)_
 
-- [ ] **A6 / B7** — `pages/admin/condominiums.tsx` continua uma lista plana, sem busca/filtro, sem agrupamento por administradora e sem página de detalhe/histórico de relacionamento por condomínio.
 - [ ] **C1** — gap independente: uma pessoa ainda não pode acumular múltiplos papéis no mesmo condomínio (ex: síndico que também mora no prédio que administra) — `Role` continua um escalar único por linha de `User`.
 - [ ] **Contato do síndico local** (adiado dentro da opção (a)) — precisaria de um campo de contato novo em `Condominium`, que não existe.
-- [ ] **Última atividade / condomínio "esquecido"** (adiado dentro da opção (a)) — sem fonte de dado confiável ainda: `AuditLog` cobre só 6 de ~22 controllers, daria sinal enganoso se usado hoje.
+- [ ] **Última atividade / condomínio "esquecido"** (adiado dentro da opção (a)) — sem fonte de dado confiável ainda: `AuditLog` cobre só 6 de 48 controllers, daria sinal enganoso se usado hoje.
 
 ---
 
