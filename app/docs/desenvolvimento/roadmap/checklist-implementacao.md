@@ -12,7 +12,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 
 ## Progresso geral
 
-**52 / 53 itens concluídos (98%)**
+**53 / 54 itens concluídos (98%)**
 
 | Fase | Foco | Itens | Status |
 |---|---|---|---|
@@ -29,7 +29,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 | 10 | Módulos de alto valor/complexidade | 2 | ✅ Concluído (2026-08-18) |
 | 11 | Fronteira tecnológica | 1 | 🔲 Não iniciado |
 | 12 | Correções da triagem de produção | 2 | ✅ Concluído (2026-08-20) |
-| 13 | Administradoras multi-condomínio | 11 | ✅ Concluído (2026-08-19 a 2026-08-27) |
+| 13 | Administradoras multi-condomínio | 12 | ✅ Concluído (2026-08-19 a 2026-08-27) |
 
 Atualize a tabela acima e o contador de progresso conforme os itens forem fechados.
 
@@ -183,12 +183,12 @@ Corrigido de quebra (achado em produção, não é bug da Fase 10): o webhook do
 - [x] A5 — status de plano/assinatura (2026-08-27) — novo campo `Condominium.planStatus` (enum trial/ativo/em_risco/cancelado, default trial) com `PATCH /condominiums/:id/plan-status` dedicado; `pages/admin/condominiums.tsx` ganhou coluna "Status" com badge colorido + `Select` inline pra trocar o status sem sair da lista. Dá ao founder visibilidade da saúde comercial de cada condomínio-cliente direto na tela que já existia.
 - [x] A6 / B7 — busca, agrupamento por administradora e página de detalhe (2026-08-27) — `list()` passou a incluir a `organization` de cada condomínio; nova `GET /condominiums/:id` retorna os mesmos sinais operacionais já usados no `portfolioSummary()` (moradores, encomendas pendentes, cobranças em atraso, chamados abertos), escopados a um único condomínio. `pages/admin/condominiums.tsx` ganhou busca por nome/código e agrupamento por administradora via `Accordion` ("Sem administradora" pros independentes); nome do condomínio virou link pra nova `pages/admin/condominium-detail.tsx` (rota `admin/condominiums/:id`), com os dados da administradora, o `Select` de status de plano (extraído pro componente reutilizável `condominium-plan-status-select.tsx`) e os 4 cards de saúde. `AuditLog` (6 de 48 controllers com cobertura) segue não confiável como sinal de "última atividade" — os cards operacionais fazem esse papel em vez disso.
 - [x] C1 — múltiplos papéis por pessoa no mesmo condomínio (2026-08-27) — `User` passou de único por `(condominiumId, email)` pra único por `(condominiumId, email, role)`: a mesma pessoa agora pode ter uma segunda linha no mesmo condomínio com papel diferente (ex: síndico que também mora no prédio), reaproveitando o mecanismo de `candidates` que o login multi-condomínio já tinha (cada linha = um candidato assinável, agora com o papel exibido no picker pra distinguir). Convites de síndico/porteiro/morador e criação direta de usuário só bloqueiam duplicata de verdade (mesmo papel); `recordAudit("user.role_added")` quando é um papel adicional. Novo `GET /auth/sibling-roles` + `POST /auth/switch-role` (reemite token pra linha irmã) e item "Trocar papel" no menu de conta — troca de papel numa sessão só, sem deslogar, mesmo padrão visual do `CondominiumSwitcherMenuItem`.
+- [x] Contato do síndico local (2026-08-27) — sem campo novo em `Condominium`: todo condomínio já nasce com um `User role: manager` vinculado (confirmado 8/8 hoje), então `GET /condominiums/:id` passou a devolver os managers (nome/e-mail/telefone) direto, evitando duplicar dado que ficaria fácil de dessincronizar. Novo Card "Contato do síndico" em `admin/condominium-detail.tsx`, com estado vazio ("Nenhum síndico cadastrado") pro caso — possível desde o C1 — de um condomínio ficar sem manager.
 
 ### Próximos passos (não iniciado)
 
 _(itens abaixo não contam no total "Itens" da fase — são backlog identificado pelo doc de gaps, ainda sem trabalho iniciado.)_
 
-- [ ] **Contato do síndico local** (adiado dentro da opção (a)) — precisaria de um campo de contato novo em `Condominium`, que não existe.
 - [ ] **Última atividade / condomínio "esquecido"** (adiado dentro da opção (a)) — sem fonte de dado confiável ainda: `AuditLog` cobre só 6 de 48 controllers, daria sinal enganoso se usado hoje.
 - [ ] **Conformidade LGPD** — nunca avaliada tecnicamente (fora do escopo de qualquer triagem já feita). O sistema guarda CPF, telefone e endereço de moradores reais; checar com alguém que entenda de compliance de dados pessoais no Brasil (base legal de tratamento, retenção, direito de exclusão) antes de formalizar contrato com o primeiro cliente pagante. Ver `docs/desenvolvimento/tecnico/triagem-producao-2026-08-20.md`, seção "Fora do escopo desta triagem técnica".
 
