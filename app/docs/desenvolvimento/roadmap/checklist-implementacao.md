@@ -12,7 +12,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 
 ## Progresso geral
 
-**41 / 42 itens concluídos (98%)**
+**49 / 50 itens concluídos (98%)**
 
 | Fase | Foco | Itens | Status |
 |---|---|---|---|
@@ -29,6 +29,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 | 10 | Módulos de alto valor/complexidade | 2 | ✅ Concluído (2026-08-18) |
 | 11 | Fronteira tecnológica | 1 | 🔲 Não iniciado |
 | 12 | Correções da triagem de produção | 2 | ✅ Concluído (2026-08-20) |
+| 13 | Administradoras multi-condomínio | 8 | ✅ Concluído (2026-08-19 a 2026-08-27) |
 
 Atualize a tabela acima e o contador de progresso conforme os itens forem fechados.
 
@@ -166,6 +167,29 @@ Corrigido de quebra (achado em produção, não é bug da Fase 10): o webhook do
 - [x] Redesign visual do painel admin (2026-08-25) — Dashboard, Solicitações, Condomínios e Usuários ganharam `PageHeader` + `Card`/`CardHeader`/`CardContent` (duas telas tinham a tabela solta, sem `Card` nenhum); Solicitações trocou o `Select` avulso por `SegmentedFilter` dentro do `CardHeader`, mesmo padrão usado no resto do app.
 - [x] Teste dedicado pra `condominiums-controller.ts` (2026-08-25) — 3 casos (duplicata de código rejeitada antes de tocar o banco, provisionamento condomínio+gestor em transação com `role` forçado server-side e sem vazar hash de senha na resposta, listagem ordenada). Suíte completa em 148/148.
 - [~] Rate-limit de login por IP — mantido como está, por decisão explícita do usuário (2026-08-25). Só mexer se virar reclamação real de cliente com Wi-Fi/NAT compartilhado.
+
+## Fase 13 — Administradoras multi-condomínio 🔴
+
+**Por que agora:** o founder levantou a dúvida de quanta visibilidade comercial ele tem sobre os próprios clientes e se o produto atende bem quem administra vários condomínios ao mesmo tempo (síndico profissional / administradora). Isso gerou uma análise de gaps que virou uma fase inteira de trabalho, cobrindo dois ângulos — Ângulo A (visibilidade comercial/CRM do founder sobre seus clientes) e Ângulo B (funcionalidade do produto pra quem administra múltiplos condomínios) — mais um gap independente (C1).
+
+- [x] Análise de gaps para prospecção de administradoras — `docs/desenvolvimento/roadmap/gaps-administradoras-multi-condominio.md` + `.canvas`, cobrindo Ângulo A, Ângulo B e o item C1 (adicionado depois, gap independente: uma pessoa não pode acumular múltiplos papéis no mesmo condomínio — segue em aberto).
+- [x] Fundação multi-condomínio (Fork §0) — novo modelo `Organization` (1:N com `Condominium`, não N:N); `Condominium.organizationId` e `User.organizationId` como FKs opcionais; `User.condominiumId` reinterpretado como "condomínio ativo" mutável para usuários de organização; novo `PATCH /auth/active-condominium` (troca sem reemissão de token, já que `authenticate()` já busca o usuário no banco a cada request); `organizations-controller.ts`/`organizations-routes.ts` (CRUD admin + `GET /organizations/me/condominiums` self-service); `condominium-switcher.tsx` no menu de conta; `seed.ts` estendido com um segundo condomínio e conta `org-manager@nexosx.com.br`. Fecha B1-B4 do doc de gaps. `@@index([condominiumId, status])` adicionado em `Package`/`VisitLog`/`AreaReservation` (gap de escala descoberto no processo, não existia índice nenhum sobre `condominiumId` antes).
+- [x] B6 — "Minha Carteira" (dashboard de portfólio) — `GET /organizations/me/portfolio-summary` (métricas operacionais por condomínio: encomendas pendentes, visitantes ativos, moradores, reservas aprovadas) e nova tela `pages/app/portfolio.tsx`, visível só para gestores de organização.
+- [x] Rename de rótulos de papel na UI — "Gestor"→"Síndico" e "Portaria"→"Porteiro" em todo o app (Administrador/Morador sem mudança): `account-menu.tsx`, `app-sidebar.tsx`, `pages/admin/users.tsx`, `pages/app/dashboard.tsx`, `pages/app/profile.tsx`, `components/staff/invite-link-modal.tsx`, `pages/auth/sign-up.tsx`, `pages/admin/condominium-requests.tsx`.
+- [x] Documentação de estratégia de produto — nova pasta `docs/corporativo/estrategia-produto/` com 3 pares doc+canvas: `modelo-de-negocio.md`/`.canvas` (Business Model Canvas do NexosX), `mapa-usuarios-sistema.md`/`.canvas` (mapa de persona/papel, desambiguando "Administrador" — papel de plataforma — de "Administradora" — a entidade `Organization` multi-condomínio) e `arquitetura-administradora.md`/`.canvas` (propõe a bifurcação opção (a) — visão de portfólio sem nova camada de conta — vs opção (b) — síndico por condomínio como pessoa distinta, hierarquicamente gerida pela administradora — apresentada como decisão em aberto, não resolvida pelo doc).
+- [x] Opção (a) escolhida e implementada: "Painel de Gestão" — `portfolioSummary` estendido com `overdueChargesCount` (`Charge`, status overdue) e `openMaintenanceRequestsCount` (`MaintenanceRequest`, status pending/in_progress) por condomínio; novo `@@index([condominiumId, status])` em `Charge` e `MaintenanceRequest`. `portfolio.tsx` reformulado: título/rótulo de menu vira "Painel de Gestão" (antes "Minha Carteira"), visão principal é uma tabela de gestão (nome do condomínio, badge de saúde derivado "Em dia"/"Atenção", contagem de inadimplência, contagem de chamados abertos, botão de acesso) dentro de um `Card`, com 4 `OverviewCards` coloridos acima (condomínios na carteira, em atenção, cobranças em atraso, chamados abertos — totais do portfólio); o grid original de 4 métricas operacionais sobrevive como aba secundária "Cards", sem mudança de comportamento. Fecha B5 parcialmente (2 métricas com total de portfólio) e B6 por completo.
+- [x] A2 + A3 — qualificação de lead e sinal de administrador recorrente — `CondominiumRequest` ganhou 3 campos opcionais (`companyName`, `portfolioSize`, `leadSource`) e um campo `internalNotes` (admin-only, editável por diálogo na tela de Solicitações); a listagem do admin passou a calcular e exibir `relatedRequestsCount` (quantas outras solicitações compartilham o mesmo `adminEmail`) como badge — sinal de administrador multi-condomínio sem mudança de schema pra isso. Novo `PATCH /condominium-requests/:id/notes`.
+- [x] A4 — funil comercial (Kanban leve) (2026-08-27) — campo `salesStage` em `CondominiumRequest` (enum novo/contatado/negociacao/proposta_enviada; Ganho/Perdido derivados do `status` já existente, não armazenados à parte) e board Kanban (sem drag-and-drop, `Select` por card pra mudar de estágio) como nova aba padrão da tela de Solicitações do admin, com a tabela atual movida pra aba "Lista". Responde diretamente à pergunta original do founder sobre visibilidade comercial. De quebra, corrigido um bug de layout no wrapper compartilhado `components/layout/app.tsx` (faltava `min-w-0` nas divs flex, então conteúdo largo — como este Kanban de 6 colunas — expandia a página inteira em vez de rolar internamente, escondendo o `CardAction`/`TabsList` fora da viewport).
+
+### Próximos passos (não iniciado)
+
+_(itens abaixo não contam no total "Itens" da fase — são backlog identificado pelo doc de gaps, ainda sem trabalho iniciado.)_
+
+- [ ] **A5** — sem campo de status de plano/assinatura em `Condominium` (trial/ativo/em risco) — o founder não enxerga a saúde do próprio negócio SaaS dentro do produto.
+- [ ] **A6 / B7** — `pages/admin/condominiums.tsx` continua uma lista plana, sem busca/filtro, sem agrupamento por administradora e sem página de detalhe/histórico de relacionamento por condomínio.
+- [ ] **C1** — gap independente: uma pessoa ainda não pode acumular múltiplos papéis no mesmo condomínio (ex: síndico que também mora no prédio que administra) — `Role` continua um escalar único por linha de `User`.
+- [ ] **Contato do síndico local** (adiado dentro da opção (a)) — precisaria de um campo de contato novo em `Condominium`, que não existe.
+- [ ] **Última atividade / condomínio "esquecido"** (adiado dentro da opção (a)) — sem fonte de dado confiável ainda: `AuditLog` cobre só 6 de ~22 controllers, daria sinal enganoso se usado hoje.
 
 ---
 
