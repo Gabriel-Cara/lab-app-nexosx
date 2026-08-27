@@ -12,7 +12,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 
 ## Progresso geral
 
-**51 / 52 itens concluídos (98%)**
+**52 / 53 itens concluídos (98%)**
 
 | Fase | Foco | Itens | Status |
 |---|---|---|---|
@@ -29,7 +29,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 | 10 | Módulos de alto valor/complexidade | 2 | ✅ Concluído (2026-08-18) |
 | 11 | Fronteira tecnológica | 1 | 🔲 Não iniciado |
 | 12 | Correções da triagem de produção | 2 | ✅ Concluído (2026-08-20) |
-| 13 | Administradoras multi-condomínio | 10 | ✅ Concluído (2026-08-19 a 2026-08-27) |
+| 13 | Administradoras multi-condomínio | 11 | ✅ Concluído (2026-08-19 a 2026-08-27) |
 
 Atualize a tabela acima e o contador de progresso conforme os itens forem fechados.
 
@@ -172,7 +172,7 @@ Corrigido de quebra (achado em produção, não é bug da Fase 10): o webhook do
 
 **Por que agora:** o founder levantou a dúvida de quanta visibilidade comercial ele tem sobre os próprios clientes e se o produto atende bem quem administra vários condomínios ao mesmo tempo (síndico profissional / administradora). Isso gerou uma análise de gaps que virou uma fase inteira de trabalho, cobrindo dois ângulos — Ângulo A (visibilidade comercial/CRM do founder sobre seus clientes) e Ângulo B (funcionalidade do produto pra quem administra múltiplos condomínios) — mais um gap independente (C1).
 
-- [x] Análise de gaps para prospecção de administradoras — `docs/desenvolvimento/roadmap/gaps-administradoras-multi-condominio.md` + `.canvas`, cobrindo Ângulo A, Ângulo B e o item C1 (adicionado depois, gap independente: uma pessoa não pode acumular múltiplos papéis no mesmo condomínio — segue em aberto).
+- [x] Análise de gaps para prospecção de administradoras — `docs/desenvolvimento/roadmap/gaps-administradoras-multi-condominio.md` + `.canvas`, cobrindo Ângulo A, Ângulo B e o item C1 (adicionado depois, gap independente: uma pessoa não pode acumular múltiplos papéis no mesmo condomínio — resolvido, ver item C1 abaixo).
 - [x] Fundação multi-condomínio (Fork §0) — novo modelo `Organization` (1:N com `Condominium`, não N:N); `Condominium.organizationId` e `User.organizationId` como FKs opcionais; `User.condominiumId` reinterpretado como "condomínio ativo" mutável para usuários de organização; novo `PATCH /auth/active-condominium` (troca sem reemissão de token, já que `authenticate()` já busca o usuário no banco a cada request); `organizations-controller.ts`/`organizations-routes.ts` (CRUD admin + `GET /organizations/me/condominiums` self-service); `condominium-switcher.tsx` no menu de conta; `seed.ts` estendido com um segundo condomínio e conta `org-manager@nexosx.com.br`. Fecha B1-B4 do doc de gaps. `@@index([condominiumId, status])` adicionado em `Package`/`VisitLog`/`AreaReservation` (gap de escala descoberto no processo, não existia índice nenhum sobre `condominiumId` antes).
 - [x] B6 — "Minha Carteira" (dashboard de portfólio) — `GET /organizations/me/portfolio-summary` (métricas operacionais por condomínio: encomendas pendentes, visitantes ativos, moradores, reservas aprovadas) e nova tela `pages/app/portfolio.tsx`, visível só para gestores de organização.
 - [x] Rename de rótulos de papel na UI — "Gestor"→"Síndico" e "Portaria"→"Porteiro" em todo o app (Administrador/Morador sem mudança): `account-menu.tsx`, `app-sidebar.tsx`, `pages/admin/users.tsx`, `pages/app/dashboard.tsx`, `pages/app/profile.tsx`, `components/staff/invite-link-modal.tsx`, `pages/auth/sign-up.tsx`, `pages/admin/condominium-requests.tsx`.
@@ -182,12 +182,12 @@ Corrigido de quebra (achado em produção, não é bug da Fase 10): o webhook do
 - [x] A4 — funil comercial (Kanban leve) (2026-08-27) — campo `salesStage` em `CondominiumRequest` (enum novo/contatado/negociacao/proposta_enviada; Ganho/Perdido derivados do `status` já existente, não armazenados à parte) e board Kanban (sem drag-and-drop, `Select` por card pra mudar de estágio) como nova aba padrão da tela de Solicitações do admin, com a tabela atual movida pra aba "Lista". Responde diretamente à pergunta original do founder sobre visibilidade comercial. De quebra, corrigido um bug de layout no wrapper compartilhado `components/layout/app.tsx` (faltava `min-w-0` nas divs flex, então conteúdo largo — como este Kanban de 6 colunas — expandia a página inteira em vez de rolar internamente, escondendo o `CardAction`/`TabsList` fora da viewport).
 - [x] A5 — status de plano/assinatura (2026-08-27) — novo campo `Condominium.planStatus` (enum trial/ativo/em_risco/cancelado, default trial) com `PATCH /condominiums/:id/plan-status` dedicado; `pages/admin/condominiums.tsx` ganhou coluna "Status" com badge colorido + `Select` inline pra trocar o status sem sair da lista. Dá ao founder visibilidade da saúde comercial de cada condomínio-cliente direto na tela que já existia.
 - [x] A6 / B7 — busca, agrupamento por administradora e página de detalhe (2026-08-27) — `list()` passou a incluir a `organization` de cada condomínio; nova `GET /condominiums/:id` retorna os mesmos sinais operacionais já usados no `portfolioSummary()` (moradores, encomendas pendentes, cobranças em atraso, chamados abertos), escopados a um único condomínio. `pages/admin/condominiums.tsx` ganhou busca por nome/código e agrupamento por administradora via `Accordion` ("Sem administradora" pros independentes); nome do condomínio virou link pra nova `pages/admin/condominium-detail.tsx` (rota `admin/condominiums/:id`), com os dados da administradora, o `Select` de status de plano (extraído pro componente reutilizável `condominium-plan-status-select.tsx`) e os 4 cards de saúde. `AuditLog` (6 de 48 controllers com cobertura) segue não confiável como sinal de "última atividade" — os cards operacionais fazem esse papel em vez disso.
+- [x] C1 — múltiplos papéis por pessoa no mesmo condomínio (2026-08-27) — `User` passou de único por `(condominiumId, email)` pra único por `(condominiumId, email, role)`: a mesma pessoa agora pode ter uma segunda linha no mesmo condomínio com papel diferente (ex: síndico que também mora no prédio), reaproveitando o mecanismo de `candidates` que o login multi-condomínio já tinha (cada linha = um candidato assinável, agora com o papel exibido no picker pra distinguir). Convites de síndico/porteiro/morador e criação direta de usuário só bloqueiam duplicata de verdade (mesmo papel); `recordAudit("user.role_added")` quando é um papel adicional. Novo `GET /auth/sibling-roles` + `POST /auth/switch-role` (reemite token pra linha irmã) e item "Trocar papel" no menu de conta — troca de papel numa sessão só, sem deslogar, mesmo padrão visual do `CondominiumSwitcherMenuItem`.
 
 ### Próximos passos (não iniciado)
 
 _(itens abaixo não contam no total "Itens" da fase — são backlog identificado pelo doc de gaps, ainda sem trabalho iniciado.)_
 
-- [ ] **C1** — gap independente: uma pessoa ainda não pode acumular múltiplos papéis no mesmo condomínio (ex: síndico que também mora no prédio que administra) — `Role` continua um escalar único por linha de `User`.
 - [ ] **Contato do síndico local** (adiado dentro da opção (a)) — precisaria de um campo de contato novo em `Condominium`, que não existe.
 - [ ] **Última atividade / condomínio "esquecido"** (adiado dentro da opção (a)) — sem fonte de dado confiável ainda: `AuditLog` cobre só 6 de 48 controllers, daria sinal enganoso se usado hoje.
 - [ ] **Conformidade LGPD** — nunca avaliada tecnicamente (fora do escopo de qualquer triagem já feita). O sistema guarda CPF, telefone e endereço de moradores reais; checar com alguém que entenda de compliance de dados pessoais no Brasil (base legal de tratamento, retenção, direito de exclusão) antes de formalizar contrato com o primeiro cliente pagante. Ver `docs/desenvolvimento/tecnico/triagem-producao-2026-08-20.md`, seção "Fora do escopo desta triagem técnica".
