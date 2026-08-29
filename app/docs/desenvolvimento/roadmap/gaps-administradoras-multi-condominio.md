@@ -5,7 +5,7 @@ Escopo: visibilidade comercial do founder sobre seus clientes (administradoras d
 Método: cruzamento de duas falas do founder — "não sei se tenho boa visibilidade dos meus compradores" e "o sistema não tem muita funcionalidade pro administrador, meu cliente principal" — com o modelo de dados (`prisma/schema.prisma`), sessão/JWT (`token.ts`), controllers operacionais e as 4 telas admin-facing existentes.
 Companion visual: `gaps-administradoras-multi-condominio.canvas`
 
-> **Status (2026-08-27): todos os itens deste doc fechados**, incluindo **C1** (múltiplos papéis por pessoa no mesmo condomínio, seção 4) — ver `checklist-implementacao.md` Fase 13. Restam só 2 itens menores adiados dentro da opção (a) (contato do síndico local, última atividade) e um levantamento técnico de LGPD, ambos fora do escopo original deste doc. Mantido como registro do raciocínio/evidência original por trás de cada item.
+> **Status (2026-08-29): todos os itens deste doc fechados**, incluindo **C1** (múltiplos papéis por pessoa no mesmo condomínio, seção 4) e os 2 itens menores adiados dentro da opção (a) (contato do síndico local, última atividade) — ver `checklist-implementacao.md` Fase 13. Resta só um levantamento técnico de LGPD, fora do escopo original deste doc. Mantido como registro do raciocínio/evidência original por trás de cada item.
 
 ---
 
