@@ -12,7 +12,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 
 ## Progresso geral
 
-**54 / 55 itens concluídos (98%)**
+**55 / 56 itens concluídos (98%)**
 
 | Fase | Foco | Itens | Status |
 |---|---|---|---|
@@ -29,7 +29,7 @@ Referências: `melhorias-nexosx.md` (detalhe de cada item) · `sequencia-impleme
 | 10 | Módulos de alto valor/complexidade | 2 | ✅ Concluído (2026-08-18) |
 | 11 | Fronteira tecnológica | 1 | 🔲 Não iniciado |
 | 12 | Correções da triagem de produção | 2 | ✅ Concluído (2026-08-20) |
-| 13 | Administradoras multi-condomínio | 13 | ✅ Concluído (2026-08-19 a 2026-08-29) |
+| 13 | Administradoras multi-condomínio | 14 | ✅ Concluído (2026-08-19 a 2026-08-29) |
 
 Atualize a tabela acima e o contador de progresso conforme os itens forem fechados.
 
@@ -186,11 +186,13 @@ Corrigido de quebra (achado em produção, não é bug da Fase 10): o webhook do
 - [x] Contato do síndico local (2026-08-27) — sem campo novo em `Condominium`: todo condomínio já nasce com um `User role: manager` vinculado (confirmado 8/8 hoje), então `GET /condominiums/:id` passou a devolver os managers (nome/e-mail/telefone) direto, evitando duplicar dado que ficaria fácil de dessincronizar. Novo Card "Contato do síndico" em `admin/condominium-detail.tsx`, com estado vazio ("Nenhum síndico cadastrado") pro caso — possível desde o C1 — de um condomínio ficar sem manager.
 - [x] Última atividade / condomínio "esquecido" (2026-08-29) — sem depender do `AuditLog` (só 6 de 48 controllers cobertos, daria sinal enganoso): `GET /condominiums` passou a devolver `lastActivityAt`, o máximo entre 6 sinais operacionais reais (visitantes, encomendas, chamados, cobranças, reservas, mural), via `groupBy` — 6 queries fixas no total, não uma por condomínio. Nova coluna "Última atividade" em `admin/condominiums.tsx` com data relativa (`date-fns` + `ptBR`), em âmbar quando o condomínio passa 60 dias sem nenhum sinal (ou nunca teve nenhum).
 
+- [x] Conformidade LGPD — levantamento técnico entregue (2026-08-29) — `docs/desenvolvimento/tecnico/levantamento-lgpd-2026-08-29.md`. Não é um parecer jurídico (isso ainda depende de alguém que entenda de compliance de dados pessoais avaliar), mas inventaria tudo que precisa: dado pessoal por tabela (CPF em texto plano em `resident-infos.cpf`), imagens em base64 direto no Postgres, os 3 terceiros que recebem PII (Resend, Twilio, Asaas — só o Asaas recebe CPF), ausência de política de retenção, ausência de termo de consentimento no cadastro, e nenhum tratamento diferenciado pra dado de menores. Achado técnico crítico próprio (não depende de decisão jurídica, virou item de backlog abaixo): o mecanismo de exclusão de usuário quebra pra qualquer morador com cobrança/chamado/voto de assembleia.
+
 ### Próximos passos (não iniciado)
 
 _(itens abaixo não contam no total "Itens" da fase — são backlog identificado pelo doc de gaps, ainda sem trabalho iniciado.)_
 
-- [ ] **Conformidade LGPD** — nunca avaliada tecnicamente (fora do escopo de qualquer triagem já feita). O sistema guarda CPF, telefone e endereço de moradores reais; checar com alguém que entenda de compliance de dados pessoais no Brasil (base legal de tratamento, retenção, direito de exclusão) antes de formalizar contrato com o primeiro cliente pagante. Ver `docs/desenvolvimento/tecnico/triagem-producao-2026-08-20.md`, seção "Fora do escopo desta triagem técnica".
+- [ ] **Exclusão de usuário incompleta** (achado durante o levantamento de LGPD, 2026-08-29) — `user-deletion-service.ts` não limpa `Charge`/`MaintenanceRequest`/`AssemblyVote` antes de deletar o `User`; as três têm FK `ON DELETE RESTRICT` pra `users` (confirmado nas migrations), então a exclusão de qualquer morador com histórico financeiro ou de chamados estoura um erro de FK não tratado. Correção de engenharia pura — só falta decidir (fora do escopo técnico) se o comportamento certo é anonimizar esses registros ou apagá-los de fato.
 
 ---
 
